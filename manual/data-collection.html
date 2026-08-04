@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Data collection – NCC Study Documentation</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../best-practices/data-management.html" rel="next">
+<link href="../manual/study-overview.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-79a35f3c4b9e2b77137be66b252dea35.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../manual/study-overview.html">Study Manual</a></li><li class="breadcrumb-item"><a href="../manual/data-collection.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data collection</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">NCC Study Documentation</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ncc-study/ncc-docs" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Study Manual</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../manual/study-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Study Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../manual/data-collection.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data collection</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Best Practices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../best-practices/data-management.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data management</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../best-practices/reproducible-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Reproducible Analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">2.1</span> Overview</a></li>
+  <li><a href="#questionnaires" id="toc-questionnaires" class="nav-link" data-scroll-target="#questionnaires"><span class="header-section-number">2.2</span> Questionnaires</a>
+  <ul class="collapse">
+  <li><a href="#how-questionnaire-data-is-collected" id="toc-how-questionnaire-data-is-collected" class="nav-link" data-scroll-target="#how-questionnaire-data-is-collected"><span class="header-section-number">2.2.1</span> How questionnaire data is collected</a></li>
+  </ul></li>
+  <li><a href="#consent" id="toc-consent" class="nav-link" data-scroll-target="#consent"><span class="header-section-number">2.3</span> Consent</a></li>
+  <li><a href="#from-nettskjema-to-tsd" id="toc-from-nettskjema-to-tsd" class="nav-link" data-scroll-target="#from-nettskjema-to-tsd"><span class="header-section-number">2.4</span> From Nettskjema to TSD</a></li>
+  <li><a href="#health-registry-linkage" id="toc-health-registry-linkage" class="nav-link" data-scroll-target="#health-registry-linkage"><span class="header-section-number">2.5</span> Health registry linkage</a></li>
+  <li><a href="#biological-samples" id="toc-biological-samples" class="nav-link" data-scroll-target="#biological-samples"><span class="header-section-number">2.6</span> Biological samples</a></li>
+  <li><a href="#participant-identification" id="toc-participant-identification" class="nav-link" data-scroll-target="#participant-identification"><span class="header-section-number">2.7</span> Participant identification</a></li>
+  <li><a href="#data-protection" id="toc-data-protection" class="nav-link" data-scroll-target="#data-protection"><span class="header-section-number">2.8</span> Data protection</a></li>
+  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also"><span class="header-section-number">2.9</span> See also</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ncc-study/ncc-docs/edit/main/manual/data-collection.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ncc-study/ncc-docs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/ncc-study/ncc-docs/blob/main/manual/data-collection.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../manual/study-overview.html">Study Manual</a></li><li class="breadcrumb-item"><a href="../manual/data-collection.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data collection</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-data-collection" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data collection</span></span></h1>
+<p class="subtitle lead">How study data is gathered and where it comes from</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The NCC-study (Koronastudien) combines <strong>self-reported questionnaire data</strong> with <strong>linked national health-registry data</strong> and <strong>biological samples</strong>. This page describes each of those sources, how participants consent, and how the data reaches the secure processing environment. For how the resulting datasets are structured and joined, see <a href="../best-practices/data-management.html">Data management</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Placeholders to complete
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page documents the <em>mechanics</em> of data collection. Study-specific facts — recruitment period, participant numbers, eligibility, and the exact schedule of follow-ups — are marked with <code>TODO</code> callouts for the study team to fill in, as they are not derivable from the processing code.</p>
+</div>
+</div>
+<section id="overview" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">2.1</span> Overview</h2>
+<p>Data is collected through three channels that are later linked on a single participant key:</p>
+<ol type="1">
+<li><strong>Questionnaires</strong> — participants answer online questionnaires hosted on <strong>Nettskjema</strong>, the University of Oslo’s survey platform.</li>
+<li><strong>Health registries</strong> — national health registries contribute records for consenting participants under the study’s approvals.</li>
+<li><strong>Biological samples</strong> — biobank and laboratory results (e.g.&nbsp;serology from dried blood spots).</li>
+</ol>
+<p>All three are delivered into <strong>TSD</strong> (Tjenester for Sensitive Data), where they are processed into research-ready datasets. Person-level data never leaves TSD.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Every source is ultimately keyed to <code>deltaker_id</code>, the study’s unique participant identifier, which is what makes the sources joinable. How that key is assigned is covered under <a href="#participant-identification">Participant identification</a>.</p>
+</div>
+</div>
+</section>
+<section id="questionnaires" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="questionnaires"><span class="header-section-number">2.2</span> Questionnaires</h2>
+<p>Questionnaires are the core data-collection instrument. Each questionnaire is a Nettskjema form, and every questionnaire is identified by a single-letter family used as the prefix on all of its variables.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 20%">
+<col style="width: 23%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Family</th>
+<th>Type</th>
+<th>Forms</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>B</strong></td>
+<td>Baseline</td>
+<td>B1, B2</td>
+<td>Enrolment questionnaire(s) capturing background at study entry</td>
+</tr>
+<tr class="even">
+<td><strong>F</strong></td>
+<td>Follow-up</td>
+<td>F1–F6 (F7+ planned)</td>
+<td>Repeated follow-up over the course of the study</td>
+</tr>
+<tr class="odd">
+<td><strong>R</strong></td>
+<td>Report</td>
+<td>R1–R6</td>
+<td>CLOC sub-study report questionnaires</td>
+</tr>
+<tr class="even">
+<td><strong>E</strong></td>
+<td>Extra</td>
+<td>E1, E2, E3</td>
+<td>Supplementary instruments — E2 has sub-forms (BRIEF, RAND-12, ISARIC)</td>
+</tr>
+<tr class="odd">
+<td><strong>Q</strong></td>
+<td>Quick</td>
+<td>Q1</td>
+<td>Short quick-response questionnaire</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>TODO — questionnaire schedule
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Describe when each questionnaire was fielded and the intended follow-up cadence (e.g.&nbsp;baseline at enrolment, follow-ups at fixed intervals). Note which questionnaires are <strong>closed</strong> (no longer accepting responses) versus still <strong>open</strong>.</p>
+</div>
+</div>
+<section id="how-questionnaire-data-is-collected" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="how-questionnaire-data-is-collected"><span class="header-section-number">2.2.1</span> How questionnaire data is collected</h3>
+<ul>
+<li>Participants complete questionnaires online in Nettskjema.</li>
+<li>Each submission is a single response; a participant answers a given questionnaire at most once, which is why the delivered data is naturally <strong>wide</strong> (one row per participant per form).</li>
+<li>Nettskjema assigns each submission an internal reference (<code>submission_reference</code>). This is used during processing to identify the participant, but is <strong>not</strong> stable across re-exports and is not a research variable.</li>
+<li>The questionnaire item text and response options are the authoritative definition of each variable; they are preserved as variable and value labels in the delivered data.</li>
+</ul>
+</section>
+</section>
+<section id="consent" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="consent"><span class="header-section-number">2.3</span> Consent</h2>
+<p>Consent is handled as a <strong>separate datastream</strong> from the questionnaires, so that participation status can be managed independently of the substantive responses.</p>
+<ul>
+<li><strong>Consent capture</strong> — participants provide informed consent, recorded via Nettskjema.</li>
+<li><strong>Identification lookups</strong> — consent processing maintains lookup tables that map a participant’s Nettskjema <code>submission_reference</code>, phone number, or email to their <code>deltaker_id</code>.</li>
+<li><strong>Revocation</strong> — participants may withdraw at any time. Withdrawn participants are recorded on a revoked-consent list, and their responses are removed during processing.</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consent is not a one-time gate. Revoked consents are re-applied on <strong>every</strong> processing run, so a withdrawal removes the participant from all subsequently delivered datasets. Analyses are always run against the current consent state.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>TODO — consent details
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Summarise what participants consent to (questionnaires, registry linkage, biobank use), the legal basis / approvals (REK, data protection), and how withdrawal is requested.</p>
+</div>
+</div>
+</section>
+<section id="from-nettskjema-to-tsd" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="from-nettskjema-to-tsd"><span class="header-section-number">2.4</span> From Nettskjema to TSD</h2>
+<p>Questionnaire and consent data move from Nettskjema into the secure environment automatically:</p>
+<ol type="1">
+<li>Participants submit responses in Nettskjema.</li>
+<li>The <strong>TSD data loader</strong> transfers submissions into TSD as raw, semicolon-delimited CSV files (one file per questionnaire form).</li>
+<li>Inside TSD, each raw file is processed independently into a cleaned, labelled per-form dataset.</li>
+</ol>
+<p>Because TSD has <strong>no network access</strong>, everything downstream of this transfer — cleaning, linkage, analysis — happens entirely within TSD. No study data is stored or processed outside it.</p>
+</section>
+<section id="health-registry-linkage" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="health-registry-linkage"><span class="header-section-number">2.5</span> Health registry linkage</h2>
+<p>For consenting participants, national health registries contribute records that extend the self-reported data with objective, longitudinal health information. Registry data is delivered to TSD as approved extracts and linked to participants on the study key.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 32%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Registry</th>
+<th>Full name</th>
+<th>Contributes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>MSIS</strong></td>
+<td>Meldingssystem for smittsomme sykdommer</td>
+<td>Notifiable infectious-disease diagnoses (incl.&nbsp;SARS-CoV-2)</td>
+</tr>
+<tr class="even">
+<td><strong>SYSVAK</strong></td>
+<td>Nasjonalt vaksinasjonsregister</td>
+<td>Vaccinations (incl.&nbsp;COVID-19 doses)</td>
+</tr>
+<tr class="odd">
+<td><strong>DÅR</strong></td>
+<td>Dødsårsaksregisteret</td>
+<td>Cause-of-death records</td>
+</tr>
+<tr class="even">
+<td><strong>NPR</strong></td>
+<td>Norsk pasientregister</td>
+<td>Hospital / specialist-care contacts</td>
+</tr>
+<tr class="odd">
+<td><strong>LMR</strong></td>
+<td>Legemiddelregisteret</td>
+<td>Dispensed prescription medications</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Registry data is often <strong>longitudinal</strong> (multiple events per participant over time). Before delivery it is summarised to one row per participant so it stays joinable on <code>deltaker_id</code> without inflating row counts. What each registry extract covers (time span, event types) is fixed by the approved data delivery.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Some registry deliveries carry strict handling conditions — for example, a national identity number may be prohibited from being stored alongside the registry records, with linkage performed through a project-specific key only. These conditions are enforced in processing and are why registry data lives in the most restricted storage tier.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>TODO — registry details
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For each registry, note the delivery period, the approval it falls under, and any registry-specific handling conditions the study team should be aware of.</p>
+</div>
+</div>
+</section>
+<section id="biological-samples" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="biological-samples"><span class="header-section-number">2.6</span> Biological samples</h2>
+<p>The study also collects biological material and derived laboratory results.</p>
+<ul>
+<li><strong>Dried blood spots (DBS)</strong> and related samples are collected from participants.</li>
+<li>Laboratory analyses (e.g.&nbsp;<strong>serology</strong> / antibody measurements) are performed and the results delivered to TSD.</li>
+<li>Biobank results are linked to participants on <code>deltaker_id</code> and processed the same way as other sources.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>TODO — biobank details
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Describe how and when biological samples were collected, which assays were run, and how results are reported back into the study.</p>
+</div>
+</div>
+</section>
+<section id="participant-identification" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="participant-identification"><span class="header-section-number">2.7</span> Participant identification</h2>
+<p>Every source above is linked to a single key, <code>deltaker_id</code>, which is what allows questionnaires, registries, and biobank data to be joined together.</p>
+<p>During processing, <code>deltaker_id</code> is assigned by matching each response against the consent lookup tables, in order of reliability:</p>
+<ol type="1">
+<li>Nettskjema <code>submission_reference</code></li>
+<li>Phone number</li>
+<li>Email address</li>
+</ol>
+<p>Once assigned, <code>deltaker_id</code> is the <strong>only</strong> identifier retained for linkage; direct contact details (phone, email) are dropped from processed data. See <a href="../best-practices/data-management.html">Data management</a> for how <code>deltaker_id</code> is used to join datasets.</p>
+</section>
+<section id="data-protection" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="data-protection"><span class="header-section-number">2.8</span> Data protection</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>TODO — governance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Summarise the study’s legal and ethical basis (REK approval, data protection impact assessment, data controller), and the retention and access rules. Reference the relevant approval documents.</p>
+</div>
+</div>
+<p>All person-level data is stored and processed exclusively within <strong>TSD</strong>, under tiered access controls that separate researcher-accessible data from the most sensitive administrative data. Only aggregated results — never person-level data — are brought out of TSD.</p>
+</section>
+<section id="see-also" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="see-also"><span class="header-section-number">2.9</span> See also</h2>
+<ul>
+<li><a href="../manual/study-overview.html">Study overview</a> — the study’s aims, design, and cohort.</li>
+<li><a href="../best-practices/data-management.html">Data management</a> — how the collected data is structured, delivered, and joined.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../manual/study-overview.html" class="pagination-link" aria-label="Study Overview">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Study Overview</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../best-practices/data-management.html" class="pagination-link" aria-label="Data management">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data management</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ncc-study/ncc-docs/edit/main/manual/data-collection.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ncc-study/ncc-docs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/ncc-study/ncc-docs/blob/main/manual/data-collection.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div></div></footer></body></html>
