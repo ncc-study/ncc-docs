@@ -22,3 +22,9 @@ Thumbs.db
 *.qs
 *.sav
 *.csv
+
+# Quarto intermediate notebooks (added automatically by `quarto render`)
+**/*.quarto_ipynb
+
+# Local scratch — not part of the published book
+/ignored_files/

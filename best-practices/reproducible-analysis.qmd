@@ -18,11 +18,7 @@ Placeholder chapter — replace with NCC's agreed analysis conventions.
 
 Example code blocks in this documentation follow the study's R conventions — tidyverse-first, native pipe, explicit `dplyr::` on `select()`/`filter()` where any namespace conflict is possible.
 
-```{r}
-#| label: example-prevalence
-#| eval: false
-#| echo: true
-
+```r
 library(tidyverse)
 library(here)
 
