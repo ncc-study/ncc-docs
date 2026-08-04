@@ -1,7 +1,8 @@
 ---
-title: "Data collection"
 subtitle: "How study data is gathered and where it comes from"
 ---
+
+# Data collection {#sec-data-collection}
 
 The NCC-study (Koronastudien) combines **self-reported questionnaire data**
 with **linked national health-registry data** and **biological samples**. This
