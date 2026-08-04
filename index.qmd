@@ -1,0 +1,22 @@
+# Welcome {.unnumbered}
+
+This is the documentation site for the **Norwegian COVID-19 Cohort (NCC / Koronastudien)**. It collects the study manual and best-practice guides used by study personnel and research collaborators.
+
+The site is organised into two parts:
+
+- **Study Manual** — how the study is run: design, procedures, and data collection.
+- **Best Practices** — shared conventions for managing and analysing NCC data reproducibly.
+
+## How to use this site
+
+Use the sidebar to navigate, or the search box (top of the sidebar) to jump to a topic. Each page has an **"Edit this page"** link once the repository URL is configured, so corrections can be proposed directly.
+
+## Contributing
+
+This documentation is maintained collaboratively by the NCC study group. To propose a change, edit the relevant `.qmd` file and open a pull request — see `README.md` in the repository for the full workflow.
+
+::: {.callout-important}
+This site is intended for documentation only. It must never contain participant-level data, personal identifiers, or restricted registry material. Assume everything here is publicly visible.
+:::
+
+*Last built: {{< meta date >}}*

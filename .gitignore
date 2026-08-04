@@ -1,0 +1,24 @@
+# Quarto build output
+/_book/
+/.quarto/
+*_files/
+/site_libs/
+
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+renv/library/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*~
+
+# Never track data in the docs repo
+/data/
+*.parquet
+*.qs
+*.sav
+*.csv

@@ -1,0 +1,41 @@
+# Reproducible Analysis
+
+::: {.callout-note}
+Placeholder chapter — replace with NCC's agreed analysis conventions.
+:::
+
+## Principles
+
+- Scripts run top-to-bottom with no hidden state.
+- Paths are project-relative (`here::here()`), never absolute.
+- A single agreed random seed is set once per analysis so results are reproducible.
+
+## Project structure
+
+*Describe the expected layout of an analysis project (e.g. `data/`, `R/`, `output/`) so work is consistent across the team.*
+
+## Example: a minimal, reproducible snippet
+
+Example code blocks in this documentation follow the study's R conventions — tidyverse-first, native pipe, explicit `dplyr::` on `select()`/`filter()` where any namespace conflict is possible.
+
+```{r}
+#| label: example-prevalence
+#| eval: false
+#| echo: true
+
+library(tidyverse)
+library(here)
+
+ncc_clean |>
+  dplyr::filter(age >= 18) |>
+  dplyr::group_by(sex, age_group) |>
+  dplyr::summarise(
+    n    = dplyr::n(),
+    prev = mean(post_covid, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+## Reporting
+
+*Conventions for tables and figures (e.g. `gtsummary`/`gt` for tables, `ggplot2` for figures) and how outputs are named and stored.*

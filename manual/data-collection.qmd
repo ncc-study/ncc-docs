@@ -1,0 +1,210 @@
+---
+title: "Data collection"
+subtitle: "How study data is gathered and where it comes from"
+---
+
+The NCC-study (Koronastudien) combines **self-reported questionnaire data**
+with **linked national health-registry data** and **biological samples**. This
+page describes each of those sources, how participants consent, and how the
+data reaches the secure processing environment. For how the resulting datasets
+are structured and joined, see
+[Data management](../best-practices/data-management.qmd).
+
+::: {.callout-note}
+## Placeholders to complete
+This page documents the *mechanics* of data collection. Study-specific facts —
+recruitment period, participant numbers, eligibility, and the exact schedule of
+follow-ups — are marked with `TODO` callouts for the study team to fill in, as
+they are not derivable from the processing code.
+:::
+
+## Overview
+
+Data is collected through three channels that are later linked on a single
+participant key:
+
+1. **Questionnaires** — participants answer online questionnaires hosted on
+   **Nettskjema**, the University of Oslo's survey platform.
+2. **Health registries** — national health registries contribute records for
+   consenting participants under the study's approvals.
+3. **Biological samples** — biobank and laboratory results (e.g. serology from
+   dried blood spots).
+
+All three are delivered into **TSD** (Tjenester for Sensitive Data), where they
+are processed into research-ready datasets. Person-level data never leaves TSD.
+
+::: {.callout-tip}
+Every source is ultimately keyed to `deltaker_id`, the study's unique
+participant identifier, which is what makes the sources joinable. How that key
+is assigned is covered under
+[Participant identification](#participant-identification).
+:::
+
+## Questionnaires
+
+Questionnaires are the core data-collection instrument. Each questionnaire is a
+Nettskjema form, and every questionnaire is identified by a single-letter
+family used as the prefix on all of its variables.
+
+| Family | Type | Forms | Purpose |
+|--------|------|-------|---------|
+| **B** | Baseline | B1, B2 | Enrolment questionnaire(s) capturing background at study entry |
+| **F** | Follow-up | F1–F6 (F7+ planned) | Repeated follow-up over the course of the study |
+| **R** | Report | R1–R6 | CLOC sub-study report questionnaires |
+| **E** | Extra | E1, E2, E3 | Supplementary instruments — E2 has sub-forms (BRIEF, RAND-12, ISARIC) |
+| **Q** | Quick | Q1 | Short quick-response questionnaire |
+
+::: {.callout-note}
+## TODO — questionnaire schedule
+Describe when each questionnaire was fielded and the intended follow-up cadence
+(e.g. baseline at enrolment, follow-ups at fixed intervals). Note which
+questionnaires are **closed** (no longer accepting responses) versus still
+**open**.
+:::
+
+### How questionnaire data is collected
+
+- Participants complete questionnaires online in Nettskjema.
+- Each submission is a single response; a participant answers a given
+  questionnaire at most once, which is why the delivered data is naturally
+  **wide** (one row per participant per form).
+- Nettskjema assigns each submission an internal reference
+  (`submission_reference`). This is used during processing to identify the
+  participant, but is **not** stable across re-exports and is not a research
+  variable.
+- The questionnaire item text and response options are the authoritative
+  definition of each variable; they are preserved as variable and value labels
+  in the delivered data.
+
+## Consent
+
+Consent is handled as a **separate datastream** from the questionnaires, so
+that participation status can be managed independently of the substantive
+responses.
+
+- **Consent capture** — participants provide informed consent, recorded via
+  Nettskjema.
+- **Identification lookups** — consent processing maintains lookup tables that
+  map a participant's Nettskjema `submission_reference`, phone number, or email
+  to their `deltaker_id`.
+- **Revocation** — participants may withdraw at any time. Withdrawn
+  participants are recorded on a revoked-consent list, and their responses are
+  removed during processing.
+
+::: {.callout-important}
+Consent is not a one-time gate. Revoked consents are re-applied on **every**
+processing run, so a withdrawal removes the participant from all subsequently
+delivered datasets. Analyses are always run against the current consent state.
+:::
+
+::: {.callout-note}
+## TODO — consent details
+Summarise what participants consent to (questionnaires, registry linkage,
+biobank use), the legal basis / approvals (REK, data protection), and how
+withdrawal is requested.
+:::
+
+## From Nettskjema to TSD
+
+Questionnaire and consent data move from Nettskjema into the secure environment
+automatically:
+
+1. Participants submit responses in Nettskjema.
+2. The **TSD data loader** transfers submissions into TSD as raw,
+   semicolon-delimited CSV files (one file per questionnaire form).
+3. Inside TSD, each raw file is processed independently into a cleaned,
+   labelled per-form dataset.
+
+Because TSD has **no network access**, everything downstream of this transfer —
+cleaning, linkage, analysis — happens entirely within TSD. No study data is
+stored or processed outside it.
+
+## Health registry linkage
+
+For consenting participants, national health registries contribute records that
+extend the self-reported data with objective, longitudinal health information.
+Registry data is delivered to TSD as approved extracts and linked to
+participants on the study key.
+
+| Registry | Full name | Contributes |
+|----------|-----------|-------------|
+| **MSIS** | Meldingssystem for smittsomme sykdommer | Notifiable infectious-disease diagnoses (incl. SARS-CoV-2) |
+| **SYSVAK** | Nasjonalt vaksinasjonsregister | Vaccinations (incl. COVID-19 doses) |
+| **DÅR** | Dødsårsaksregisteret | Cause-of-death records |
+| **NPR** | Norsk pasientregister | Hospital / specialist-care contacts |
+| **LMR** | Legemiddelregisteret | Dispensed prescription medications |
+
+::: {.callout-note}
+Registry data is often **longitudinal** (multiple events per participant over
+time). Before delivery it is summarised to one row per participant so it stays
+joinable on `deltaker_id` without inflating row counts. What each registry
+extract covers (time span, event types) is fixed by the approved data delivery.
+:::
+
+::: {.callout-important}
+Some registry deliveries carry strict handling conditions — for example, a
+national identity number may be prohibited from being stored alongside the
+registry records, with linkage performed through a project-specific key only.
+These conditions are enforced in processing and are why registry data lives in
+the most restricted storage tier.
+:::
+
+::: {.callout-note}
+## TODO — registry details
+For each registry, note the delivery period, the approval it falls under, and
+any registry-specific handling conditions the study team should be aware of.
+:::
+
+## Biological samples
+
+The study also collects biological material and derived laboratory results.
+
+- **Dried blood spots (DBS)** and related samples are collected from
+  participants.
+- Laboratory analyses (e.g. **serology** / antibody measurements) are performed
+  and the results delivered to TSD.
+- Biobank results are linked to participants on `deltaker_id` and processed the
+  same way as other sources.
+
+::: {.callout-note}
+## TODO — biobank details
+Describe how and when biological samples were collected, which assays were run,
+and how results are reported back into the study.
+:::
+
+## Participant identification
+
+Every source above is linked to a single key, `deltaker_id`, which is what
+allows questionnaires, registries, and biobank data to be joined together.
+
+During processing, `deltaker_id` is assigned by matching each response against
+the consent lookup tables, in order of reliability:
+
+1. Nettskjema `submission_reference`
+2. Phone number
+3. Email address
+
+Once assigned, `deltaker_id` is the **only** identifier retained for linkage;
+direct contact details (phone, email) are dropped from processed data. See
+[Data management](../best-practices/data-management.qmd) for how `deltaker_id`
+is used to join datasets.
+
+## Data protection
+
+::: {.callout-note}
+## TODO — governance
+Summarise the study's legal and ethical basis (REK approval, data protection
+impact assessment, data controller), and the retention and access rules.
+Reference the relevant approval documents.
+:::
+
+All person-level data is stored and processed exclusively within **TSD**, under
+tiered access controls that separate researcher-accessible data from the most
+sensitive administrative data. Only aggregated results — never person-level
+data — are brought out of TSD.
+
+## See also
+
+- [Study overview](study-overview.qmd) — the study's aims, design, and cohort.
+- [Data management](../best-practices/data-management.qmd) — how the collected
+  data is structured, delivered, and joined.

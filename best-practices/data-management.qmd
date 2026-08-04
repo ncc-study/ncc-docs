@@ -1,0 +1,243 @@
+---
+title: "Data management"
+subtitle: "How study data is organised, delivered, and joined"
+---
+
+This page describes the conventions you need to know to work with **NCC-study
+(Koronastudien)** data: how datasets are structured, what the different
+delivery formats are, how sensitive data is separated, and how to join data
+sources correctly. It is aimed at researchers and analysts using the delivered
+data — not at the people maintaining the processing pipeline.
+
+::: {.callout-important}
+## All NCC data lives on TSD
+
+Study data is highly sensitive and never leaves **TSD** (Tjenester for
+Sensitive Data). You analyse it inside TSD; you bring *results* out by hand,
+never person-level data. Nothing on this public documentation site contains
+real data, participant identifiers, or internal server paths — and neither
+should anything you copy out of TSD. See
+[Reproducible analysis](reproducible-analysis.qmd) for the "code in / results
+out" workflow.
+:::
+
+## The shape of the data
+
+Every delivered dataset — whether a single questionnaire file, a topic-specific
+dataset, or the full legacy dataset — follows the same three rules. Together
+these make any two files safe to join.
+
+1. **`deltaker_id` is the join key.** It is the unique participant identifier
+   and appears as the first column of every file. It is the *only* key you ever
+   join on.
+2. **One row per participant.** Delivered datasets are in **wide** format: one
+   row per `deltaker_id`, no duplicates. Longitudinal registry data is
+   pre-summarised to wide before delivery, so it never causes fan-out.
+3. **Variable names are globally unique.** Every variable is prefixed with its
+   form, so columns from different files never collide when joined.
+
+::: {.callout-tip}
+Because of rules 1–3, joining is always a clean `1:1` merge on `deltaker_id`.
+If a join produces more rows than participants, something is wrong — stop and
+check before analysing.
+:::
+
+### Variable prefixes
+
+Each questionnaire item is prefixed with the form it came from. Derived and
+computed variables have their own prefixes.
+
+| Prefix | Meaning | Example |
+|--------|---------|---------|
+| `B_`   | Baseline (B1, B2) | `B_Age_gr` |
+| `F1_`–`F6_` | Follow-up questionnaires | `F6_Hospitalised_v2` |
+| `R1_`–`R6_` | CLOC sub-study reports | `R3_Report_date` |
+| `E1_`–`E3_` | Extra questionnaires | `E2_RAND12_gh` |
+| `Q1_`  | Quick questionnaire | `Q1_Symptoms` |
+| `deriv_` | Derived cross-form variable | `deriv_infection_status` |
+| `gen_` | Computed scale score | `gen_phq9_sum` |
+| `C1_`  | Composite / combined variable | `C1_vaccine_status` |
+
+Knowing the prefix tells you at a glance which source a variable came from and
+which file you need in order to have it.
+
+## Labelled data
+
+Delivered files are **labelled**: variables carry a human-readable variable
+label and, for categorical items, value labels. Both Norwegian and English
+labels are maintained. In R these arrive as `haven_labelled` vectors.
+
+::: {.callout-note}
+Treat labels as documentation, not as data. Convert to explicit factors when
+you need the text (e.g. `haven::as_factor()`), and keep the underlying codes
+for modelling. Never hard-code a label string as a filter condition — value
+*codes* are stable across releases, label wording may be refined.
+:::
+
+Question text and value labels are the semantic definition of an item and are
+stable even when the underlying variable name changes between pipeline
+versions. If you are ever unsure what a variable means, the label — not the
+name — is the source of truth. A **codebook** (variable names, labels, value
+labels, types) is delivered alongside every dataset.
+
+## Which dataset should I use?
+
+Two delivery modes are produced from the same underlying per-form files, so
+they are always mutually consistent.
+
+::: {.panel-tabset}
+
+### Topic datasets (recommended for new work)
+
+Curated, pre-assembled datasets scoped to a research area — e.g. CLOC, long
+COVID, vaccine. Each contains only the forms, registry data, and derived
+variables relevant to that topic. They are **smaller, faster to load, and
+easier to reason about**. Start here for any new project.
+
+```
+cloc_dataset.qs
+long_covid_dataset.qs
+vaccine_dataset.qs
+```
+
+### Legacy full dataset
+
+A single wide dataset joining all forms with all derived variables, mirroring
+the historical `full_deriv.qs`. Variable names, prefixes, and derived variables
+match the old pipeline, so **existing analysis scripts keep working
+unchanged**. It is large and memory-hungry — use it only when you specifically
+need backward compatibility with an established pipeline.
+
+```
+full_deriv.qs
+```
+
+:::
+
+::: {.callout-tip}
+## Rule of thumb
+New project → topic dataset. Maintaining an old pipeline that already loads
+`full_deriv.qs` → keep using the legacy dataset until you have time to migrate.
+Both are built from the same source data, so results agree.
+:::
+
+## Data sensitivity: research vs admin tiers
+
+Data is separated into two tiers by sensitivity. As a researcher you work in
+the **research (yellow)** tier.
+
+| Tier | Access | Contains |
+|------|--------|----------|
+| **Research (yellow)** | Researchers + admins | Delivered per-form files, topic and legacy datasets, codebooks. Free-text / elaboration fields are **suppressed**. |
+| **Admin (black/red)** | Data managers only | Full files including free-text elaboration fields and raw consent data. |
+
+Free-text and open-ended "elaboration" fields (typically named `*_elaborate`),
+and any field that could re-identify a participant, are classified as sensitive
+and are **not** present in the research-tier files.
+
+### Requesting sensitive fields
+
+If your analysis genuinely needs a suppressed field — for example free-text
+responses for a qualitative analysis — the data manager can assemble a custom
+dataset that includes *only* the specific sensitive columns you need, alongside
+your standard research variables. This custom dataset is shared with you
+individually and does not enter the general research area.
+
+::: {.callout-note}
+Every release of admin-tier data is an explicit, logged action by the data
+manager — it is not something you can trigger yourself. Request it early if you
+anticipate needing it.
+:::
+
+## Joining datasets
+
+All joins are `1:1` on `deltaker_id`. Pick the join type by which participants
+you want to keep.
+
+| Goal | Join | Result |
+|------|------|--------|
+| Everyone from both files | **full join** | Keeps all participants; `NA` for forms not completed |
+| Only those who completed both | **inner join** | Smaller; no cross-form missingness |
+| Start from one file, enrich it | **left join** | Keeps all rows of the left file |
+
+For most cohort analyses, **full join** is the safe default: it preserves the
+whole cohort and represents non-participation as missing rather than silently
+dropping people.
+
+::: {.panel-tabset}
+
+### R
+
+```r
+library(dplyr)
+library(qs)          # or qs2 for newer files
+
+b1 <- qread("B1.qs")
+f1 <- qread("F1.qs")
+f2 <- qread("F2.qs")
+
+# Full join — keep the whole cohort
+df <- b1 |>
+  full_join(f1, by = "deltaker_id") |>
+  full_join(f2, by = "deltaker_id")
+
+# Sanity check: no join should increase the participant count
+stopifnot(nrow(df) == n_distinct(df$deltaker_id))
+```
+
+### Stata
+
+```stata
+use "B1.dta", clear
+
+merge 1:1 deltaker_id using "F1.dta", nogenerate
+merge 1:1 deltaker_id using "F2.dta", nogenerate
+
+* _merge == 1  only in base (did not complete the other form)
+* _merge == 2  only in using file
+* _merge == 3  in both
+```
+
+### SPSS
+
+```spss
+* Sort every file by the key before matching.
+GET FILE='B1.sav'.
+SORT CASES BY deltaker_id.
+SAVE OUTFILE='B1_sorted.sav'.
+
+GET FILE='F1.sav'.
+SORT CASES BY deltaker_id.
+SAVE OUTFILE='F1_sorted.sav'.
+
+MATCH FILES
+  /FILE='B1_sorted.sav'
+  /FILE='F1_sorted.sav'
+  /BY deltaker_id.
+EXECUTE.
+```
+
+:::
+
+::: {.callout-warning}
+Always verify the row count after joining. A `1:1` merge on `deltaker_id`
+should never produce more rows than there are participants. If it does, you
+have likely picked up a file that is not deduplicated — do not proceed.
+:::
+
+## Good practice checklist
+
+- [ ] Start from a **topic dataset** unless you specifically need legacy
+  compatibility.
+- [ ] Join **only** on `deltaker_id`, and check the row count afterwards.
+- [ ] Read variable meanings from the **label / codebook**, not the name.
+- [ ] Filter on value **codes**, not label text.
+- [ ] Request any **sensitive fields** from the data manager early.
+- [ ] Keep all person-level data inside **TSD** — export results only.
+
+## See also
+
+- [Reproducible analysis](reproducible-analysis.qmd) — the TSD "code in /
+  results out" workflow and project conventions.
+- The delivered **codebook** for the exact variables, labels, and value codes
+  in your dataset.

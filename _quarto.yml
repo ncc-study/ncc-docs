@@ -1,0 +1,52 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "NCC Study Documentation"
+  subtitle: "Study Manual & Best-Practice Guides"
+  author: "The Norwegian COVID-19 Cohort (NCC / Koronastudien) Study Group"
+  date: today
+  search: true
+  # Update ORG/REPO to enable the "Edit this page" / "Report an issue" links.
+  repo-url: https://github.com/ncc-study/ncc-docs
+  repo-branch: main
+  repo-actions: [edit, issue, source]
+  page-navigation: true
+  sidebar:
+    style: docked
+    collapse-level: 1
+  chapters:
+    - index.qmd
+    - part: "Study Manual"
+      chapters:
+        - manual/study-overview.qmd
+        - manual/data-collection.qmd
+    - part: "Best Practices"
+      chapters:
+        - best-practices/data-management.qmd
+        - best-practices/reproducible-analysis.qmd
+    - references.qmd
+
+bibliography: references.bib
+lang: en
+
+format:
+  html:
+    theme:
+      - cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    code-copy: true
+
+# ── Optional PDF output ──────────────────────────────────────────────
+# Uncomment to also produce a downloadable PDF of the whole book.
+# Typst needs no LaTeX install and is the lightest option for CI.
+#   format:
+#     html: { ... as above ... }
+#     titlepage-pdf:
+#       documentclass: scrreprt
+# Then add `downloads: [pdf]` under `book:` above.
+# If you use the classic LaTeX PDF instead, add a tinytex setup step
+# to .github/workflows/publish.yml.

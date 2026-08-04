@@ -1,0 +1,25 @@
+# Study Overview
+
+::: {.callout-note}
+Placeholder chapter — replace the content below with the current NCC study description.
+:::
+
+## Background and aims
+
+*Describe the purpose of the NCC / Koronastudien, its research questions, and its funding/governance context.*
+
+## Study design
+
+*Cohort type, recruitment strategy, and follow-up schedule.*
+
+## Population and eligibility
+
+*Inclusion and exclusion criteria, catchment, and how participants enter the cohort.*
+
+## Data sources
+
+The study draws on several linked data sources. Summarise them here (questionnaires, clinical measurements, and registry linkages) and link to the relevant procedures in @sec-data-collection.
+
+## Governance and approvals
+
+*Ethics approvals (REK), data protection basis, and the DPIA/DPA references. Link to the secure internal location for the approval documents themselves — do not reproduce restricted documents here.*

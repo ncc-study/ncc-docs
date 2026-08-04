@@ -1,0 +1,10 @@
+/* NCC study documentation — team-editable styles.
+   Keep overrides minimal; the cosmo theme handles most of the look. */
+
+:root {
+  --ncc-accent: #0b6e4f;
+}
+
+.sidebar-title {
+  font-weight: 600;
+}
