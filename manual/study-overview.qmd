@@ -1,25 +1,201 @@
-# Study Overview
+---
+subtitle: "What the study is, how it is designed, and who takes part"
+---
+
+# Study overview {#sec-study-overview}
+
+The **Norwegian COVID-19 Cohort (NCC / Koronastudien)** is a cohort study that
+follows participants over time using self-reported questionnaires, linked
+national health-registry records, and biological samples. This page is the
+entry point to the study manual: it describes what the study is, how it is
+designed, and who is in it. For the mechanics of how each type of data is
+gathered and reaches the secure processing environment, see
+@sec-data-collection.
 
 ::: {.callout-note}
-Placeholder chapter — replace the content below with the current NCC study description.
+## Placeholders to complete
+The sections describing **data sources** and **how the study is run** are
+written from the study's documented processing setup. The sections that state
+study-specific facts — aims, recruitment period, eligibility, cohort size, and
+the ethics and data-protection approvals — are marked with `TODO` callouts.
+Those facts are not derivable from the repository and must come from the study
+team.
 :::
+
+## At a glance
+
+| | |
+|---|---|
+| **Study name** | Norwegian COVID-19 Cohort (NCC) / Koronastudien |
+| **Design** | Cohort study with a baseline questionnaire and repeated follow-up |
+| **Data capture** | Online questionnaires via **Nettskjema** (University of Oslo) |
+| **Linked sources** | National health registries (MSIS, SYSVAK, DÅR, NPR, LMR); biobank / laboratory results |
+| **Participant key** | `deltaker_id` — one row per participant in every delivered dataset |
+| **Processing environment** | **TSD** (Tjenester for Sensitive Data); person-level data never leaves it |
+| **Sub-studies** | CLOC (see [Sub-studies](#sub-studies)) |
+| **Recruitment period** | *TODO — study team* |
+| **Cohort size** | *TODO — study team* |
+| **Eligibility** | *TODO — study team* |
+| **Ethics approval** | *TODO — study team* |
 
 ## Background and aims
 
-*Describe the purpose of the NCC / Koronastudien, its research questions, and its funding/governance context.*
+::: {.callout-note}
+## TODO — background and aims
+Describe why the study was established and what it is designed to answer:
+
+- the context it was set up in and the question(s) it was created to address;
+- the primary research aims, and the main secondary aims;
+- the funder(s) and the responsible institution(s);
+- the study's current status — whether it is still recruiting, still fielding
+  follow-ups, or in analysis only.
+
+Keep this section short and factual; it is the section most readers outside the
+study group will read first.
+:::
 
 ## Study design
 
-*Cohort type, recruitment strategy, and follow-up schedule.*
+The study is a cohort followed **prospectively** through repeated
+self-completed questionnaires, with participant-reported data extended by
+**passive follow-up** through national registry linkage.
+
+Data collection is organised into questionnaire *families*, each identified by
+a single-letter prefix that is carried through to every variable derived from
+it:
+
+| Family | Role in the design |
+|--------|--------------------|
+| **B** (B1, B2) | Baseline — background characteristics at study entry |
+| **F** (F1–F6, F7+ planned) | Repeated follow-up over the course of the study |
+| **R** (R1–R6) | CLOC sub-study report questionnaires |
+| **E** (E1–E3) | Supplementary instruments (incl. BRIEF, RAND-12, ISARIC) |
+| **Q** (Q1) | Short quick-response questionnaire |
+
+A participant answers a given questionnaire at most once, so each form yields
+one row per participant. Registry data, which is longitudinal by nature, is
+summarised to the same one-row-per-participant shape before delivery. The
+result is that every source in the study is joinable `1:1` on `deltaker_id` —
+the property that the whole data model rests on. See
+[Data management](../best-practices/data-management.qmd) for what this means in
+practice.
+
+Consent is maintained as a **separate datastream** from the questionnaire
+responses, and withdrawals are re-applied on every processing run, so analyses
+always reflect the current consent state rather than consent at the time of
+response.
+
+::: {.callout-note}
+## TODO — recruitment and follow-up schedule
+State how participants were recruited and over what period, and give the
+intended follow-up cadence: when the baseline was fielded, at what intervals
+follow-ups were sent, and which questionnaires are now **closed** versus still
+**open**. The questionnaire families are documented above; what is missing is
+the timeline.
+
+The same schedule is requested in @sec-data-collection — write it in one place
+and cross-reference it from the other rather than maintaining two copies.
+:::
 
 ## Population and eligibility
 
-*Inclusion and exclusion criteria, catchment, and how participants enter the cohort.*
+::: {.callout-note}
+## TODO — population and eligibility
+Specify:
+
+- **inclusion criteria** — who was eligible to enrol (age, residency,
+  infection or exposure status, any other requirement);
+- **exclusion criteria**;
+- **catchment** — whether recruitment was national, regional, or tied to
+  specific institutions;
+- **how participants enter the cohort** — the route from invitation to
+  consented participant;
+- **cohort size** — number enrolled, and the number currently active after
+  withdrawals.
+
+If participant numbers change between data releases, state which release the
+figures refer to rather than giving a bare number.
+:::
 
 ## Data sources
 
-The study draws on several linked data sources. Summarise them here (questionnaires, clinical measurements, and registry linkages) and link to the relevant procedures in @sec-data-collection.
+The study draws on three data channels, linked on `deltaker_id`:
+
+1. **Questionnaires** — self-reported data collected through Nettskjema, the
+   University of Oslo's survey platform, and transferred into TSD
+   automatically.
+2. **National health registries** — for consenting participants, under the
+   study's approvals. Registries contribute objective, longitudinal health
+   information that continues independently of whether a participant answers a
+   questionnaire.
+3. **Biological samples** — biobank material and derived laboratory results,
+   including serology from dried blood spots.
+
+| Registry | Contributes |
+|----------|-------------|
+| **MSIS** | Notifiable infectious-disease diagnoses (incl. SARS-CoV-2) |
+| **SYSVAK** | Vaccinations (incl. COVID-19 doses) |
+| **DÅR** | Cause-of-death records |
+| **NPR** | Hospital and specialist-care contacts |
+| **LMR** | Dispensed prescription medications |
+
+Each source, and the route it takes into TSD, is documented in full in
+@sec-data-collection. Some registry deliveries carry handling conditions that
+are stricter than the study's general rules; those conditions are enforced in
+processing and are described there.
+
+## Sub-studies
+
+Parts of the cohort take part in sub-studies that use their own questionnaires
+and are delivered as their own topic datasets.
+
+- **CLOC** — uses the R-family report questionnaires (R1–R6) and is delivered
+  as `cloc_dataset`.
+
+::: {.callout-note}
+## TODO — sub-studies
+Describe each sub-study: its aim, which participants are included, its
+questionnaires, and whether it has separate approvals or its own governance.
+Add any sub-study not listed above.
+:::
 
 ## Governance and approvals
 
-*Ethics approvals (REK), data protection basis, and the DPIA/DPA references. Link to the secure internal location for the approval documents themselves — do not reproduce restricted documents here.*
+All person-level study data is stored and processed exclusively within **TSD**,
+under tiered access controls that separate researcher-accessible data from the
+most sensitive administrative data. Only aggregated results are brought out of
+TSD — never person-level data. The tiers, and how to request access to
+restricted fields, are described in
+[Data management](../best-practices/data-management.qmd).
+
+::: {.callout-important}
+Approval documents, data processing agreements, and any material containing
+identifiers must **not** be reproduced on this site — it is public. Link to the
+secure internal location instead.
+:::
+
+::: {.callout-note}
+## TODO — approvals and legal basis
+Record, with reference numbers where they exist and links to the secure
+internal location for the documents themselves:
+
+- **REK approval** — approval number, date, and what it covers, including any
+  amendments;
+- **legal basis for processing** and the **data controller**;
+- **DPIA** and any **data processing agreements**;
+- **retention and access rules** — how long data is kept and who may be granted
+  access;
+- **publication and authorship policy**, if the study group maintains one.
+
+The same governance summary is requested in @sec-data-collection under *Data
+protection*. Keep it in one place and cross-reference.
+:::
+
+## See also
+
+- [Data collection](data-collection.qmd) — how each data source is gathered and
+  reaches TSD.
+- [Data management](../best-practices/data-management.qmd) — how the delivered
+  data is structured and joined.
+- [Reproducible analysis](../best-practices/reproducible-analysis.qmd) — the
+  "code in / results out" TSD workflow.
