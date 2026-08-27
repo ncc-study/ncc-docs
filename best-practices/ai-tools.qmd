@@ -8,8 +8,11 @@ AI coding assistants — Claude, Claude Code, GitHub Copilot, ChatGPT and
 similar — are useful for writing and reviewing analysis code, drafting
 documentation, and explaining unfamiliar code. They are also a route by which
 sensitive data can leave a protected environment, because everything typed into
-a hosted assistant is sent to a third party. This page sets out how the study
-group uses them.
+a hosted assistant is sent to a third party.
+
+The study group's position is therefore simple: **AI assistants are used to
+develop analyses against a synthetic dummy dataset, never against real study
+data.** This page explains what that means in practice.
 
 ::: {.callout-note}
 ## Draft — not yet agreed by the study group
@@ -17,12 +20,11 @@ group uses them.
 This chapter is a **working draft**. It is deliberately not listed in
 `book.chapters`, so it does not appear on the published site.
 
-The sections on **the hard line**, **working across the air gap**, **dummy
-data**, and **verification** describe what already follows from how NCC data is
-governed (see [Data management](data-management.qmd) and [Study overview](../manual/study-overview.qmd)).
-The sections marked `TODO` are genuine policy decisions the study group has to
-make — they cannot be derived from the repository. Once those are settled and
-the chapter is agreed, register it under `book.chapters` in `_quarto.yml`.
+The rule that assistants are used only on dummy data, and the workflow that
+follows from it, reflect the study group's decision. The sections marked `TODO`
+are points still to be settled — including the dummy dataset itself, which is
+being built. Once those are resolved and the chapter is agreed, register it
+under `book.chapters` in `_quarto.yml`.
 :::
 
 ## Who and what this applies to
@@ -36,106 +38,117 @@ It does **not** change any existing rule about data handling. Where this page
 and the study's approvals or data processing agreements differ, the approvals
 govern.
 
-## The hard line
+## The rule
 
 ::: {.callout-important}
-## Person-level NCC data must never be given to an AI assistant
+## AI assistants are never used on real study data
 
-NCC data is highly sensitive person-level health and registry data. It lives on
-**TSD** and it does not leave TSD. Pasting it into a hosted assistant sends it
-to a third party outside the study's approvals, and that is a personal-data
-breach regardless of the assistant, the account, or the intention.
+Assistants are used **only** against the synthetic dummy dataset, outside TSD.
+No real NCC data goes to an assistant in any form, and no assistant is involved
+at any point where real data is being handled.
 
-This applies to every form the data can take: rows from a dataset, a printout
-of the first few records, a screenshot of the data viewer, identifiers, dates
-of birth, free-text questionnaire answers, and small or raw cell counts —
-including "just a couple of example rows" to illustrate a problem.
-:::
+That means none of the following:
+
+- rows from a real dataset, however few, including "just a couple of examples";
+- a printout of the first few records, or a screenshot of the data viewer;
+- identifiers, dates of birth, addresses, or free-text questionnaire answers;
+- real counts or results, whether or not small cells are suppressed;
+- error messages or console output produced by a run against real data.
 
 There is no exception for a small excerpt, a de-identified-looking extract, an
 assistant that claims not to train on inputs, or an enterprise account. If you
-are unsure whether something counts, treat it as data and do not share it.
+are unsure whether something counts, treat it as real data and do not share it.
+:::
 
-## Why TSD changes how assistants are used
+The dummy dataset is what makes this workable rather than merely restrictive.
+Because it mirrors the real schema, an assistant that can see the dummy data
+can do essentially everything it could do with the real thing — write the join,
+fix the recode, debug the error — without any of the risk.
 
-TSD has **no internet access**, so no AI assistant runs inside TSD. Every
-assistant you use is necessarily outside the secure environment. That gives the
-working model the study already uses for analysis, applied to assistants:
+## The workflow
 
-1. **Code out.** You describe the problem to the assistant *outside* TSD, using
-   code and structure only, and it writes or reviews code.
-2. **Carry it in.** You copy the code into TSD by hand.
-3. **Run it there.** The code executes against the real data inside TSD. The
-   assistant is not involved in this step and cannot be.
-4. **Sanitized results out.** You bring back only what is safe to bring back
-   (see below) — typically an error message, a structural diagnostic, or an
-   aggregated, suppression-checked result.
+TSD has **no internet access**, so no AI assistant runs inside TSD. Combined
+with the rule above, that gives a clean separation: the assistant works on one
+side of the wall, real data stays on the other, and only *code* crosses.
 
-Two consequences are worth stating plainly. The assistant **has never seen your
-data and cannot run your code**, so any claim it makes about what the code
-produces is a prediction, not a result. And because each round trip costs real
-manual effort, it is worth getting the code reviewed carefully before you carry
-it across.
+1. **Develop outside TSD, on dummy data.** Write and debug the analysis with
+   the assistant against the dummy dataset, where it can actually run the code
+   and see real errors. Iterate here until it works.
+2. **Verify it yourself.** Read the finished code line by line (see
+   [Verification](#verification-expectations)). This is the point at which you,
+   not the assistant, take responsibility for it.
+3. **Carry the code into TSD by hand.** The code crosses the air gap; the
+   assistant does not.
+4. **Run it on the real data inside TSD.** Check the output against what the
+   dummy run led you to expect. The assistant plays no part in this step.
 
-## What may and may not be shared
+::: {.callout-warning}
+## If it fails on real data, go back to the dummy set
 
-| Safe to share with an assistant | Never share with an assistant |
-|---|---|
-| Code — R scripts, do-files, Quarto documents | Any rows of real data, however few |
-| Error messages and warnings, with data values removed | Identifiers, names, dates of birth, addresses |
-| Variable **structure**: names, types, factor levels and labels, *without values* | Console output that prints real records |
-| Cohort-level dimensions (row and column counts) | Small or raw cell counts below the suppression threshold |
-| Aggregated results that already meet the study's disclosure rules | Free-text questionnaire answers |
-| Dummy or synthetic data and its output | Screenshots of the data viewer or of raw output |
-| Study documentation that is already public | Credentials, internal server names, or paths |
+When code works on dummy data but fails or looks wrong on the real data, the
+fix is to **reproduce the problem in the dummy dataset** — adjust the dummy
+data so it exhibits the same edge case, then debug there with the assistant.
 
-::: {.callout-tip}
-## Ask for structure, not values
+Do not carry the real error message, the real output, or the real values back
+out to the assistant to ask what went wrong. That is the step this policy
+exists to prevent, and it is also the step that feels most reasonable in the
+moment.
 
-Most of the time an assistant does not need your data to help — it needs the
-*shape* of your data. Variable names, types, and factor levels are enough to
-write a correct join or a correct recode. If an assistant asks you for example
-rows, give it the schema instead, or generate dummy data (below).
+If the dummy dataset cannot reproduce the problem, that is worth reporting —
+it usually means the dummy set is missing a pattern the real data has.
 :::
 
 ::: {.callout-note}
-## TODO — study team: rule on structure, codebooks, and aggregates
+## TODO — study team: is the return leg fully closed?
 
-The table above reflects current working practice, not a ratified decision. The
-study group needs to state explicitly whether each of the following may be
-shared with a hosted assistant, and under what conditions:
+The workflow above closes the loop entirely: **nothing** produced by a run
+against real data goes to an assistant, including sanitized error text and
+disclosure-checked aggregate results.
 
-- **Variable names and structure** — treated as shareable above, on the basis
-  that names and types disclose nothing about any participant. Confirm or
-  restrict.
-- **Codebooks** — including full factor level and value labels. These can
-  contain free-text response options and rare categories; decide whether the
-  whole codebook, an extract, or nothing may be shared.
-- **Aggregate results** — decide whether results that already pass the study's
-  disclosure control may be pasted into an assistant for help with
-  interpretation or table formatting, or whether the rule is that *nothing*
-  derived from the real data goes to an assistant regardless of aggregation.
-- **The suppression threshold** to apply, and whether it differs from the
-  threshold used for publication.
-
-Record the decision here, and cross-reference the disclosure-control rules in
-[Data management](data-management.qmd) rather than restating them.
+This is the strict reading of the rule and the safer default. The group should
+confirm it, or state the narrow exception it wants — for example, allowing a
+bare error message with all values stripped. If an exception is granted, say
+precisely who decides that a given paste is safe, because in practice that
+judgement is made under time pressure by the person who most wants the answer.
 :::
 
-## Developing on dummy data
+## The dummy dataset
 
-The reliable way to use an assistant well is to give it something it can
-legitimately see: a **synthetic dataset that mirrors the real schema** — the
-same variable names, types, and value labels, with entirely invented values.
+::: {.callout-note}
+## TODO — study team: the dummy dataset is still being built
 
-- Generate dummy data from scratch. It must never be sampled, perturbed, or
-  reconstructed from real records — a perturbed extract is still personal data.
-- Label it unmistakably as synthetic, for example with a `dummy_` prefix and a
-  header comment, so it can never be mistaken for a real extract.
-- Set the study's agreed seed once, so the dummy data is reproducible.
+A shared synthetic dataset mirroring the NCC schema is planned but not yet
+available. Until it exists, this chapter describes the intended workflow rather
+than one that can be followed today.
 
-Code developed and debugged against dummy data transfers cleanly into TSD, and
-most errors are caught before they cost an air-gap round trip.
+Record here, once settled:
+
+- **where it lives** and how to get it — it is safe to distribute outside TSD,
+  so it can sit alongside the analysis code;
+- **what it covers** — which questionnaire families, registry variables, and
+  derived variables are represented, and which are not yet;
+- **who maintains it**, and how to request that a variable or a pattern be
+  added;
+- **how it is versioned**, so an analysis can record which version it was
+  developed against;
+- whether generating your own dummy data is acceptable where the shared set
+  does not yet cover something.
+:::
+
+The dummy dataset mirrors the real schema — the same variable names, types, and
+value labels — with entirely invented values. Two properties matter:
+
+- **It is synthetic from scratch.** It is never sampled, perturbed, or
+  reconstructed from real records. A perturbed extract of real data is still
+  personal data and would defeat the whole arrangement.
+- **It is safe to share freely.** Dummy data and any output derived from it can
+  go to an assistant, be pasted into a conversation, or be committed alongside
+  code. That is the entire point of having it.
+
+If you generate your own dummy data because the shared set does not yet cover
+what you need, follow the same rules: build it from scratch, label it
+unmistakably as synthetic (a `dummy_` prefix and a header comment), and set the
+study's agreed seed so it is reproducible.
 
 ```r
 library(tidyverse)
@@ -149,30 +162,70 @@ dummy_baseline <- tibble(
 )
 ```
 
-## Verification expectations
+::: {.callout-tip}
+## Make the dummy data hard, not tidy
+
+Dummy data that is cleaner than the real thing produces code that breaks on
+contact with the real thing. Where you know the real data has missing values,
+rare categories, unexpected codes, or participants missing from a questionnaire
+family, put those in the dummy set too — that is where they are cheap to
+handle.
+:::
+
+## What may be shared with an assistant
+
+| Safe to share | Never share |
+|---|---|
+| The dummy dataset, and any output derived from it | Any real data, in any form or quantity |
+| Code — R scripts, do-files, Quarto documents | Real console output, results, tables, or figures |
+| Errors from a dummy-data run | Errors from a real-data run |
+| Variable names, types, and factor labels (as carried by the dummy set) | Identifiers, dates of birth, addresses, free text |
+| Study documentation that is already public | Credentials, internal server names, or paths |
+
+Note what this table no longer needs to argue about. Because the dummy dataset
+carries the schema and is safe by construction, questions like "may I share
+variable names?" or "may I paste the codebook?" mostly answer themselves: share
+the dummy set. The line is not *how sensitive is this extract* but *did it come
+from real data*, which is a question you can always answer.
+
+## Verification expectations {#verification-expectations}
 
 ::: {.callout-warning}
 ## AI-written code is a draft until a human has read it
 
-An assistant produces plausible code, not verified code. It cannot run against
-NCC data, and it will state confidently that code works when it has never been
-executed.
+An assistant produces plausible code, not verified code. Code that runs green
+against dummy data has been shown to be *syntactically* sound and to behave
+sensibly on invented values — not to be correct for the study's actual
+research question.
 :::
 
-Before AI-assisted code is used on real data:
+Before AI-assisted code is run on real data:
 
 1. **Read it line by line.** You are responsible for code you run on NCC data,
    whoever or whatever wrote it. If you cannot explain what a line does, do not
    run it.
-2. **Check every variable name against the codebook.** Assistants working from
-   a described schema will invent plausible variable names that do not exist,
-   or use a name from a different questionnaire family.
+2. **Check every variable name against the codebook.** A name that exists in
+   the dummy set exists in the real data, but an assistant may still have
+   picked the wrong variable — a plausible name from the wrong questionnaire
+   family, or the wrong follow-up round.
 3. **Check joins specifically.** Every NCC join is a `1:1` merge on
    `deltaker_id`; a join that changes the row count means something is wrong.
    Assert the expected row count in the code rather than checking by eye.
-4. **Check that disclosure control survived.** If the code produces a table
-   that will come out of TSD, confirm small-cell suppression is actually
-   applied before anything is exported or screenshotted.
+4. **Check the analysis answers the question you actually asked.** This is the
+   failure the dummy set cannot catch: code can be flawless and still estimate
+   the wrong thing.
+5. **Check that disclosure control is applied.** If the code produces a table
+   that will come out of TSD, confirm small-cell suppression is in the code
+   before it runs, not added afterwards by hand.
+
+::: {.callout-important}
+## Dummy-data green is not real-data correct
+
+A successful dummy run tells you the code executes. It does not tell you the
+result is right. Missingness patterns, rare categories, and coding quirks in
+the real data will differ from anything invented, so review real output on its
+own terms rather than assuming the dummy run settled it.
+:::
 
 And for anything that reaches a manuscript:
 
@@ -196,7 +249,8 @@ Decide and record:
   that most publishers require that AI tools are **not** listed as authors.
 - **In internal analysis documentation** — whether analysis plans and analysis
   scripts should record that an assistant was used, and if so where (a header
-  comment, a section in the plan, or a project log).
+  comment, a section in the plan, or a project log). Recording the dummy
+  dataset version the analysis was developed against belongs here too.
 - **In this repository** — whether AI-assisted contributions to the
   documentation should be flagged in the pull request.
 :::
@@ -211,18 +265,22 @@ List the assistants the group has approved, and for each: where it may be run
 type is required, and whether it may be pointed at the analysis repository.
 
 Record who to ask before adopting a tool that is not on the list, and note that
-the question needs answering **before** first use, not after. Any assistant
-that indexes a whole project directory or runs commands automatically needs
-particular scrutiny, since it can read more than the user intends to share.
+the question needs answering **before** first use, not after.
+
+Assistants that index a whole project directory or run commands automatically
+need particular scrutiny. On a machine that also holds real data — an exported
+extract, a downloaded result, a screenshot — such a tool can read files the
+user never intended to share, which is a way real data reaches an assistant
+without anyone pasting anything.
 :::
 
-## If data reaches an assistant anyway
+## If real data reaches an assistant anyway
 
-If you realise that person-level data, identifiers, or an unsuppressed result
-has been pasted into an assistant, treat it as a suspected personal-data breach
-and report it immediately. Do not wait to establish how serious it was, and do
-not try to resolve it by deleting the conversation — deletion does not undo the
-transfer, and it destroys the record needed to assess what happened.
+If you realise that real data of any kind has been given to an assistant, treat
+it as a suspected personal-data breach and report it immediately. Do not wait
+to establish how serious it was, and do not try to resolve it by deleting the
+conversation — deletion does not undo the transfer, and it destroys the record
+needed to assess what happened.
 
 ::: {.callout-note}
 ## TODO — study team: incident route
@@ -238,4 +296,5 @@ internal procedure rather than reproducing it here.
   disclosure rules that govern what leaves TSD.
 - [Reproducible analysis](reproducible-analysis.qmd) — the "code in / results
   out" TSD workflow this page builds on.
-- [Study overview](../manual/study-overview.qmd) — the study's governance and approvals.
+- [Study overview](../manual/study-overview.qmd) — the study's governance and
+  approvals.
