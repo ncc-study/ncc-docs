@@ -22,6 +22,7 @@ book:
       chapters:
         - manual/study-overview.qmd
         - manual/data-collection.qmd
+        # - manual/cohorts.qmd   # draft — not published until the subcohorts are documented
     - part: "Best Practices"
       chapters:
         - best-practices/data-management.qmd
