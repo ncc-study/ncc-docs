@@ -14,7 +14,7 @@ The study group's position therefore depends on **where the assistant runs**:
 - **Off-site assistants** — Claude, and UiOGPT as a secondary option — run
   outside TSD. They are used to develop analyses against a synthetic dummy
   dataset, **never against real study data**.
-- **TSDGPT** runs inside TSD and is completely closed off: everything stays on
+- **TSD LLM** runs inside TSD and is completely closed off: everything stays on
   the TSD server. It **may be used with real study data**, inside TSD.
 
 This page explains what that means in practice.
@@ -48,14 +48,14 @@ govern.
 |------|------|------|------------------|
 | **Claude** | Off-site (outside TSD) | The team's main AI work tool | **Never** — dummy data only |
 | **UiOGPT** | Off-site (outside TSD) | Secondary option, if you have access | **Never** — dummy data only |
-| **TSDGPT** | On-site (inside TSD) | AI assistance on the real data, inside TSD | **Yes** — inside TSD only |
+| **TSD LLM** | On-site (inside TSD) | AI assistance on the real data, inside TSD | **Yes** — inside TSD only |
 
-TSDGPT offers a browser chat interface and an API. The API means it can also
+TSD LLM offers a browser chat interface and an API. The API means it can also
 be used from command-line coding tools inside TSD, such as aider (installed as
 the `aider-chat` Python package).
 
 The line between the two groups is not how trustworthy the provider is, but
-**whether the data leaves TSD**. With Claude and UiOGPT it does; with TSDGPT it
+**whether the data leaves TSD**. With Claude and UiOGPT it does; with TSD LLM it
 does not.
 
 ## The rule for off-site tools
@@ -74,7 +74,7 @@ That means none of the following:
 - identifiers, dates of birth, addresses, or free-text questionnaire answers;
 - real counts or results, whether or not small cells are suppressed;
 - error messages or console output produced by a run against real data;
-- anything TSDGPT produced from real data — its answers are inside TSD and
+- anything TSD LLM produced from real data — its answers are inside TSD and
   stay there.
 
 There is no exception for a small excerpt, a de-identified-looking extract, an
@@ -107,22 +107,22 @@ the other, and only *code* crosses.
 ## If it fails on real data, stay inside TSD
 
 When code works on dummy data but fails or looks wrong on the real data,
-**debug it inside TSD with TSDGPT**, or **reproduce the problem in the dummy
+**debug it inside TSD with TSD LLM**, or **reproduce the problem in the dummy
 dataset** — adjust the dummy data so it exhibits the same edge case — and debug
 it there with the off-site assistant.
 
 Do not carry the real error message, the real output, or the real values back
 out to Claude or UiOGPT to ask what went wrong. That is the step this policy
 exists to prevent, and it is also the step that feels most reasonable in the
-moment. TSDGPT exists so that you never need to.
+moment. TSD LLM exists so that you never need to.
 
 If the dummy dataset cannot reproduce the problem, that is worth reporting —
 it usually means the dummy set is missing a pattern the real data has.
 :::
 
-## Working on-site: TSDGPT
+## Working on-site: TSD LLM
 
-TSDGPT runs entirely within TSD, so it can be given what off-site tools never
+TSD LLM runs entirely within TSD, so it can be given what off-site tools never
 can: real data, real output, and real error messages. Use it for work that needs
 the real data in view — debugging a failure that only happens on real data,
 checking a recode against the actual values, or reviewing results.
@@ -130,9 +130,31 @@ checking a recode against the actual values, or reviewing results.
 - **Chat:** use the browser interface inside TSD.
 - **Coding tools:** use the API from tools such as aider, run inside TSD.
 
+### Getting access
+
+TSD LLM is available to all TSD projects but is **not enabled by default**. A
+PI or project administrator enables it for the project, or for individual
+members.
+
+1. If you do not have access, ask the NCC project's PI or a project
+   administrator to enable TSD LLM for you.
+2. They enable it in TSD Selfservice under AI management
+   (<https://selfservice.tsd.usit.no/ai-management>). This page can be opened
+   from outside TSD.
+3. Once access is enabled, open a browser **inside** your TSD project, go to
+   the TSD start page (<https://start.tsd.usit.no>), and follow the
+   **TSD LLM** link.
+
+::: {.callout-note}
+TSD LLM is running as a **pilot**. Token use is measured, and chat and API use
+count towards the same usage. There is no charge during the pilot, but token
+billing will be introduced later — keep heavy automated API use, such as
+long aider sessions, in proportion.
+:::
+
 Everything else about working in TSD still applies:
 
-- **TSDGPT output derived from real data is real data.** Its answers, code
+- **TSD LLM output derived from real data is real data.** Its answers, code
   comments, and summaries follow the same export rules as any other TSD
   output: only disclosure-checked aggregate results leave TSD, never
   person-level data.
@@ -143,21 +165,21 @@ Everything else about working in TSD still applies:
 - **Keep the API key out of code.** Read it from an environment variable or a
   local configuration file that is not committed. Do not write it into scripts,
   Quarto documents, or this documentation.
-- **Verification still applies.** Code from TSDGPT is a draft until a human has
+- **Verification still applies.** Code from TSD LLM is a draft until a human has
   read it, exactly like code from an off-site assistant (see
   [Verification](#verification-expectations)).
 
 ::: {.callout-note}
-## TODO — study team: TSDGPT access and setup
+## TODO — study team: API and aider setup
 
-Record, by linking to the secure internal location rather than reproducing it
-here (this site is public):
+Record how to configure aider or another tool to use the TSD LLM API inside
+TSD — link to USIT's documentation or the secure internal location rather than
+reproducing project-specific details here (this site is public).
 
-- how to get access to TSDGPT, and who to ask;
-- how to configure aider or another tool to use the TSDGPT API;
-- any limits on use — for example which TSD projects it is available in.
+Also record how the study group will handle token billing once the pilot ends:
+who pays, and whether there is a usage limit per member.
 
-Do not put the API address, keys, or internal server names on this page.
+Do not put API keys or project-specific paths on this page.
 :::
 
 ## The dummy dataset
@@ -224,7 +246,7 @@ handle.
 
 ## What may be shared with an off-site assistant
 
-This table is for Claude and UiOGPT. TSDGPT, inside TSD, may also see the
+This table is for Claude and UiOGPT. TSD LLM, inside TSD, may also see the
 right-hand column — but what it produces stays in TSD.
 
 | Safe to share | Never share |
@@ -247,7 +269,7 @@ from real data*, which is a question you can always answer.
 ## AI-written code is a draft until a human has read it
 
 An assistant produces plausible code, not verified code. This applies equally
-to Claude, UiOGPT, and TSDGPT. Code that runs green against dummy data has been
+to Claude, UiOGPT, and TSD LLM. Code that runs green against dummy data has been
 shown to be *syntactically* sound and to behave sensibly on invented values —
 not to be correct for the study's actual research question.
 :::
@@ -337,7 +359,7 @@ and report it immediately. Do not wait to establish how serious it was, and do
 not try to resolve it by deleting the conversation — deletion does not undo the
 transfer, and it destroys the record needed to assess what happened.
 
-Using TSDGPT with real data inside TSD is not an incident; that is what it is
+Using TSD LLM with real data inside TSD is not an incident; that is what it is
 for.
 
 ::: {.callout-note}
