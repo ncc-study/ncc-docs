@@ -130,26 +130,10 @@ checking a recode against the actual values, or reviewing results.
 - **Chat:** use the browser interface inside TSD.
 - **Coding tools:** use the API from tools such as aider, run inside TSD.
 
-### Getting access
-
-TSD LLM is available to all TSD projects but is **not enabled by default**. A
-PI or project administrator enables it for the project, or for individual
-members.
-
-1. If you do not have access, ask the NCC project's PI or a project
-   administrator to enable TSD LLM for you.
-2. They enable it in TSD Selfservice under AI management
-   (<https://selfservice.tsd.usit.no/ai-management>). This page can be opened
-   from outside TSD.
-3. Once access is enabled, open a browser **inside** your TSD project, go to
-   the TSD start page (<https://start.tsd.usit.no>), and follow the
-   **TSD LLM** link.
+TSD LLM is enabled for all members of the NCC project.
 
 ::: {.callout-note}
-TSD LLM is running as a **pilot**. Token use is measured, and chat and API use
-count towards the same usage. There is no charge during the pilot, but token
-billing will be introduced later — keep heavy automated API use, such as
-long aider sessions, in proportion.
+TSD LLM is running as a **pilot**, and the study group is testing it for now.
 :::
 
 Everything else about working in TSD still applies:
