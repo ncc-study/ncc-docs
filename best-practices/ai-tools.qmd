@@ -1,0 +1,364 @@
+---
+subtitle: "How AI coding assistants may and may not be used in NCC work"
+---
+
+# AI tools {#sec-ai-tools}
+
+AI coding assistants are useful for writing and reviewing analysis code,
+drafting documentation, and explaining unfamiliar code. They are also a route
+by which sensitive data can leave a protected environment, because everything
+typed into a hosted assistant is sent to whoever runs it.
+
+The study group's position therefore depends on **where the assistant runs**:
+
+- **Off-site assistants** — Claude, and UiOGPT as a secondary option — run
+  outside TSD. They are used to develop analyses against a synthetic dummy
+  dataset, **never against real study data**.
+- **TSD LLM** runs inside TSD and is completely closed off: everything stays on
+  the TSD server. It **may be used with real study data**, inside TSD.
+
+This page explains what that means in practice.
+
+::: {.callout-note}
+## Draft — not yet agreed by the study group
+
+This chapter is a **working draft**. It is deliberately not listed in
+`book.chapters`, so it does not appear on the published site.
+
+The tool choices and the rules for each reflect the study group's decision. The
+sections marked `TODO` are points still to be settled — including the dummy
+dataset itself, which is being built. Once those are resolved and the chapter
+is agreed, register it under `book.chapters` in `_quarto.yml`.
+:::
+
+## Who and what this applies to
+
+This guidance applies to everyone doing NCC work — analysts, students,
+collaborators — and to any AI assistant, whether it is a chat interface, an
+editor plugin, or a command-line agent. It covers assistant use for analysis
+code, documentation, and manuscript text.
+
+It does **not** change any existing rule about data handling. Where this page
+and the study's approvals or data processing agreements differ, the approvals
+govern.
+
+## The tools
+
+| Tool | Runs | Role | Real study data? |
+|------|------|------|------------------|
+| **Claude** | Off-site (outside TSD) | The team's main AI work tool | **Never** — dummy data only |
+| **UiOGPT** | Off-site (outside TSD) | Secondary option, if you have access | **Never** — dummy data only |
+| **TSD LLM** | On-site (inside TSD) | AI assistance on the real data, inside TSD | **Yes** — inside TSD only |
+
+TSD LLM offers a browser chat interface and an API. The API means it can also
+be used from command-line coding tools inside TSD, such as aider (installed as
+the `aider-chat` Python package).
+
+The line between the two groups is not how trustworthy the provider is, but
+**whether the data leaves TSD**. With Claude and UiOGPT it does; with TSD LLM it
+does not.
+
+## The rule for off-site tools
+
+::: {.callout-important}
+## Claude and UiOGPT are never used on real study data
+
+Off-site assistants are used **only** against the synthetic dummy dataset,
+outside TSD. No real NCC data goes to them in any form, and they are not
+involved at any point where real data is being handled.
+
+That means none of the following:
+
+- rows from a real dataset, however few, including "just a couple of examples";
+- a printout of the first few records, or a screenshot of the data viewer;
+- identifiers, dates of birth, addresses, or free-text questionnaire answers;
+- real counts or results, whether or not small cells are suppressed;
+- error messages or console output produced by a run against real data;
+- anything TSD LLM produced from real data — its answers are inside TSD and
+  stay there.
+
+There is no exception for a small excerpt, a de-identified-looking extract, an
+assistant that claims not to train on inputs, or an enterprise account. If you
+are unsure whether something counts, treat it as real data and do not share it.
+:::
+
+The dummy dataset is what makes this workable rather than merely restrictive.
+Because it mirrors the real schema, an assistant that can see the dummy data
+can do essentially everything it could do with the real thing — write the join,
+fix the recode, debug the error — without any of the risk.
+
+## Working off-site: develop on dummy data
+
+The off-site assistant works on one side of the TSD boundary, real data stays on
+the other, and only *code* crosses.
+
+1. **Develop outside TSD, on dummy data.** Write and debug the analysis with
+   Claude (or UiOGPT) against the dummy dataset, where it can actually run the
+   code and see real errors. Iterate here until it works.
+2. **Verify it yourself.** Read the finished code line by line (see
+   [Verification](#verification-expectations)). This is the point at which you,
+   not the assistant, take responsibility for it.
+3. **Carry the code into TSD by hand.** The code crosses into TSD; the off-site
+   assistant does not.
+4. **Run it on the real data inside TSD.** Check the output against what the
+   dummy run led you to expect.
+
+::: {.callout-warning}
+## If it fails on real data, stay inside TSD
+
+When code works on dummy data but fails or looks wrong on the real data,
+**debug it inside TSD with TSD LLM**, or **reproduce the problem in the dummy
+dataset** — adjust the dummy data so it exhibits the same edge case — and debug
+it there with the off-site assistant.
+
+Do not carry the real error message, the real output, or the real values back
+out to Claude or UiOGPT to ask what went wrong. That is the step this policy
+exists to prevent, and it is also the step that feels most reasonable in the
+moment. TSD LLM exists so that you never need to.
+
+If the dummy dataset cannot reproduce the problem, that is worth reporting —
+it usually means the dummy set is missing a pattern the real data has.
+:::
+
+## Working on-site: TSD LLM
+
+TSD LLM runs entirely within TSD, so it can be given what off-site tools never
+can: real data, real output, and real error messages. Use it for work that needs
+the real data in view — debugging a failure that only happens on real data,
+checking a recode against the actual values, or reviewing results.
+
+- **Chat:** use the browser interface inside TSD.
+- **Coding tools:** use the API from tools such as aider, run inside TSD.
+
+TSD LLM is enabled for all members of the NCC project.
+
+::: {.callout-note}
+TSD LLM is running as a **pilot**, and the study group is testing it for now.
+:::
+
+Everything else about working in TSD still applies:
+
+- **TSD LLM output derived from real data is real data.** Its answers, code
+  comments, and summaries follow the same export rules as any other TSD
+  output: only disclosure-checked aggregate results leave TSD, never
+  person-level data.
+- **Keep data out of version control.** Coding tools such as aider commit
+  changes to git automatically. Keep data files and real output outside the
+  repository the tool works in, and check its commits before any code leaves
+  TSD — otherwise a commit can carry real data out with the code.
+- **Keep the API key out of code.** Read it from an environment variable or a
+  local configuration file that is not committed. Do not write it into scripts,
+  Quarto documents, or this documentation.
+- **Verification still applies.** Code from TSD LLM is a draft until a human has
+  read it, exactly like code from an off-site assistant (see
+  [Verification](#verification-expectations)).
+
+::: {.callout-note}
+## TODO — study team: API and aider setup
+
+Record how to configure aider or another tool to use the TSD LLM API inside
+TSD — link to USIT's documentation or the secure internal location rather than
+reproducing project-specific details here (this site is public).
+
+Also record how the study group will handle token billing once the pilot ends:
+who pays, and whether there is a usage limit per member.
+
+Do not put API keys or project-specific paths on this page.
+:::
+
+## The dummy dataset
+
+The dummy dataset is what makes off-site AI use possible.
+
+::: {.callout-note}
+## TODO — study team: the dummy dataset is still being built
+
+A shared synthetic dataset mirroring the NCC schema is planned but not yet
+available. Until it exists, off-site use depends on dummy data you generate
+yourself (see below).
+
+Record here, once settled:
+
+- **where it lives** and how to get it — it is safe to distribute outside TSD,
+  so it can sit alongside the analysis code;
+- **what it covers** — which questionnaire families, registry variables, and
+  derived variables are represented, and which are not yet;
+- **who maintains it**, and how to request that a variable or a pattern be
+  added;
+- **how it is versioned**, so an analysis can record which version it was
+  developed against;
+- whether generating your own dummy data is acceptable where the shared set
+  does not yet cover something.
+:::
+
+The dummy dataset mirrors the real schema — the same variable names, types, and
+value labels — with entirely invented values. Two properties matter:
+
+- **It is synthetic from scratch.** It is never sampled, perturbed, or
+  reconstructed from real records. A perturbed extract of real data is still
+  personal data and would defeat the whole arrangement.
+- **It is safe to share freely.** Dummy data and any output derived from it can
+  go to an assistant, be pasted into a conversation, or be committed alongside
+  code. That is the entire point of having it.
+
+If you generate your own dummy data because the shared set does not yet cover
+what you need, follow the same rules: build it from scratch, label it
+unmistakably as synthetic (a `dummy_` prefix and a header comment), and set the
+study's agreed seed so it is reproducible.
+
+```r
+library(tidyverse)
+
+set.seed(936)
+
+dummy_baseline <- tibble(
+  deltaker_id = seq_len(500),
+  B_Age_gr    = sample(c("18-39", "40-59", "60+"), 500, replace = TRUE),
+  B_Sex       = sample(c("Female", "Male"), 500, replace = TRUE)
+)
+```
+
+::: {.callout-tip}
+## Make the dummy data hard, not tidy
+
+Dummy data that is cleaner than the real thing produces code that breaks on
+contact with the real thing. Where you know the real data has missing values,
+rare categories, unexpected codes, or participants missing from a questionnaire
+family, put those in the dummy set too — that is where they are cheap to
+handle.
+:::
+
+## What may be shared with an off-site assistant
+
+This table is for Claude and UiOGPT. TSD LLM, inside TSD, may also see the
+right-hand column — but what it produces stays in TSD.
+
+| Safe to share | Never share |
+|---|---|
+| The dummy dataset, and any output derived from it | Any real data, in any form or quantity |
+| Code — R scripts, do-files, Quarto documents | Real console output, results, tables, or figures |
+| Errors from a dummy-data run | Errors from a real-data run |
+| Variable names, types, and factor labels (as carried by the dummy set) | Identifiers, dates of birth, addresses, free text |
+| Study documentation that is already public | Credentials, internal server names, or paths |
+
+Note what this table no longer needs to argue about. Because the dummy dataset
+carries the schema and is safe by construction, questions like "may I share
+variable names?" or "may I paste the codebook?" mostly answer themselves: share
+the dummy set. The line is not *how sensitive is this extract* but *did it come
+from real data*, which is a question you can always answer.
+
+## Verification expectations {#verification-expectations}
+
+::: {.callout-warning}
+## AI-written code is a draft until a human has read it
+
+An assistant produces plausible code, not verified code. This applies equally
+to Claude, UiOGPT, and TSD LLM. Code that runs green against dummy data has been
+shown to be *syntactically* sound and to behave sensibly on invented values —
+not to be correct for the study's actual research question.
+:::
+
+Before AI-assisted code is run on real data:
+
+1. **Read it line by line.** You are responsible for code you run on NCC data,
+   whoever or whatever wrote it. If you cannot explain what a line does, do not
+   run it.
+2. **Check every variable name against the codebook.** A name that exists in
+   the dummy set exists in the real data, but an assistant may still have
+   picked the wrong variable — a plausible name from the wrong questionnaire
+   family, or the wrong follow-up round.
+3. **Check joins specifically.** Every NCC join is a `1:1` merge on
+   `deltaker_id`; a join that changes the row count means something is wrong.
+   Assert the expected row count in the code rather than checking by eye.
+4. **Check the analysis answers the question you actually asked.** This is the
+   failure the dummy set cannot catch: code can be flawless and still estimate
+   the wrong thing.
+5. **Check that disclosure control is applied.** If the code produces a table
+   that will come out of TSD, confirm small-cell suppression is in the code
+   before it runs, not added afterwards by hand.
+
+::: {.callout-important}
+## Dummy-data green is not real-data correct
+
+A successful dummy run tells you the code executes. It does not tell you the
+result is right. Missingness patterns, rare categories, and coding quirks in
+the real data will differ from anything invented, so review real output on its
+own terms rather than assuming the dummy run settled it.
+:::
+
+And for anything that reaches a manuscript:
+
+::: {.callout-important}
+No AI-generated result, table, figure, or number goes into a manuscript,
+report, or presentation without a human having verified it against the analysis
+output it claims to come from. The same applies to AI-drafted text making
+factual claims about the study — check it against this manual.
+:::
+
+## Disclosure
+
+::: {.callout-note}
+## TODO — study team: when AI assistance must be declared
+
+Decide and record:
+
+- **In publications** — which journal and funder AI-disclosure policies the
+  group follows, what level of assistance triggers a declaration (code help
+  versus drafted text versus generated analysis), and the wording to use. Note
+  that most publishers require that AI tools are **not** listed as authors.
+- **In internal analysis documentation** — whether analysis plans and analysis
+  scripts should record that an assistant was used, and which one, and if so
+  where (a header comment, a section in the plan, or a project log). Recording
+  the dummy dataset version the analysis was developed against belongs here
+  too.
+- **In this repository** — whether AI-assisted contributions to the
+  documentation should be flagged in the pull request.
+:::
+
+## Accounts and new tools
+
+::: {.callout-note}
+## TODO — study team: accounts, access, and new tools
+
+The approved tools are listed under [The tools](#the-tools). Record, for each:
+which account type is required (for example a team or institutional account
+rather than a personal one), how to get access, and whether it may be pointed
+at an analysis repository.
+
+Record who to ask before adopting a tool that is not on the list, and note that
+the question needs answering **before** first use, not after.
+
+Off-site assistants that index a whole project directory or run commands
+automatically — Claude Code is one — need particular scrutiny. On a machine
+that also holds real data — an exported extract, a downloaded result, a
+screenshot — such a tool can read files the user never intended to share, which
+is a way real data reaches an assistant without anyone pasting anything.
+:::
+
+## If real data reaches an off-site assistant anyway
+
+If you realise that real data of any kind has been given to Claude, UiOGPT, or
+any other assistant outside TSD, treat it as a suspected personal-data breach
+and report it immediately. Do not wait to establish how serious it was, and do
+not try to resolve it by deleting the conversation — deletion does not undo the
+transfer, and it destroys the record needed to assess what happened.
+
+Using TSD LLM with real data inside TSD is not an incident; that is what it is
+for.
+
+::: {.callout-note}
+## TODO — study team: incident route
+
+Name the person or role to notify first, the institutional route for reporting
+a personal-data breach at OUS, and the deadline that applies. Link to the
+internal procedure rather than reproducing it here.
+:::
+
+## See also
+
+- [Data management](data-management.qmd) — how NCC data is structured, and the
+  disclosure rules that govern what leaves TSD.
+- [Reproducible analysis](reproducible-analysis.qmd) — the "code in / results
+  out" TSD workflow this page builds on.
+- [Study overview](../manual/study-overview.qmd) — the study's governance and
+  approvals.
