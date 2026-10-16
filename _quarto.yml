@@ -8,7 +8,7 @@ book:
   author: "The Norwegian COVID-19 Cohort (NCC / Koronastudien) Study Group"
   date: today
   search: true
-  # Update ORG/REPO to enable the "Edit this page" / "Report an issue" links.
+  # Drives the "Edit this page" / "Report an issue" links. Update if the repo moves.
   repo-url: https://github.com/ncc-study/ncc-docs
   repo-branch: main
   repo-actions: [edit, issue, source]

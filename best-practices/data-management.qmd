@@ -172,9 +172,9 @@ dropping people.
 library(dplyr)
 library(qs)          # or qs2 for newer files
 
-b1 <- qread("B1.qs")
-f1 <- qread("F1.qs")
-f2 <- qread("F2.qs")
+b1 <- qread(here::here("B1.qs"))
+f1 <- qread(here::here("F1.qs"))
+f2 <- qread(here::here("F2.qs"))
 
 # Full join — keep the whole cohort
 df <- b1 |>

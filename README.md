@@ -7,8 +7,8 @@ Study manual and best-practice guides for the **Norwegian COVID-19 Cohort (NCC /
 1. **Install Quarto** (>= 1.4): <https://quarto.org/docs/get-started/>.
 2. Clone the repo and preview locally:
    ```bash
-   git clone https://github.com/ORG/REPO.git
-   cd REPO
+   git clone https://github.com/ncc-study/ncc-docs.git
+   cd ncc-docs
    quarto preview
    ```
 3. Edit the `.qmd` files. Add new chapters by creating the file and registering it under `book.chapters` in `_quarto.yml`.
@@ -21,7 +21,7 @@ Publishing is automatic: any push to `main` triggers `.github/workflows/publish.
 
 1. Push this repo to GitHub.
 2. In **Settings → Pages**, set the source to the **`gh-pages` branch** (root folder). The workflow creates that branch on its first run.
-3. Update `repo-url:` in `_quarto.yml` (and the links in this README) to your `ORG/REPO`.
+3. `repo-url:` in `_quarto.yml` points to `ncc-study/ncc-docs`. If the repository is moved or renamed, update it there and in the clone command above.
 
 The published site is **public**. Keep participant data, identifiers, credentials, and restricted material out of the repository — see `CLAUDE.md` for the full data-safety notes.
 

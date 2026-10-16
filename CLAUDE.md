@@ -11,6 +11,8 @@ The audience is people who run, manage, and analyse the study. Documentation mus
 ## Repository structure
 
 ```
+README.md                       Repo readme (not part of the rendered book)
+TODO.md                         Shared backlog (not part of the rendered book)
 _quarto.yml                     Book config: metadata, chapter order, output formats
 index.qmd                       Preface / landing page
 manual/                         Part 1 — how the study is run
