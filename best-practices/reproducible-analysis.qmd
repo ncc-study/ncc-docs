@@ -20,7 +20,6 @@ Example code blocks in this documentation follow the study's R conventions — t
 
 ```r
 library(tidyverse)
-library(here)
 
 ncc_clean |>
   dplyr::filter(age >= 18) |>

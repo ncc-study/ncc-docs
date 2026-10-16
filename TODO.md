@@ -47,7 +47,7 @@ URL right now.
       `main` was pushed to directly three times, each of which published. The
       `CLAUDE.md` workflow (feature branch → PR → merge) is currently a
       convention with nothing enforcing it.
-- [ ] **`index.qmd:12`** says the "Edit this page" link appears *"once the
+- [x] **`index.qmd:12`** says the "Edit this page" link appears *"once the
       repository URL is configured"* — `repo-url` is now configured and
       matches `origin`, so that hedge is stale. Reword.
 
