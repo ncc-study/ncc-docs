@@ -4,15 +4,20 @@ subtitle: "How AI coding assistants may and may not be used in NCC work"
 
 # AI tools {#sec-ai-tools}
 
-AI coding assistants — Claude, Claude Code, GitHub Copilot, ChatGPT and
-similar — are useful for writing and reviewing analysis code, drafting
-documentation, and explaining unfamiliar code. They are also a route by which
-sensitive data can leave a protected environment, because everything typed into
-a hosted assistant is sent to a third party.
+AI coding assistants are useful for writing and reviewing analysis code,
+drafting documentation, and explaining unfamiliar code. They are also a route
+by which sensitive data can leave a protected environment, because everything
+typed into a hosted assistant is sent to whoever runs it.
 
-The study group's position is therefore simple: **AI assistants are used to
-develop analyses against a synthetic dummy dataset, never against real study
-data.** This page explains what that means in practice.
+The study group's position therefore depends on **where the assistant runs**:
+
+- **Off-site assistants** — Claude, and UiOGPT as a secondary option — run
+  outside TSD. They are used to develop analyses against a synthetic dummy
+  dataset, **never against real study data**.
+- **TSDGPT** runs inside TSD and is completely closed off: everything stays on
+  the TSD server. It **may be used with real study data**, inside TSD.
+
+This page explains what that means in practice.
 
 ::: {.callout-note}
 ## Draft — not yet agreed by the study group
@@ -20,11 +25,10 @@ data.** This page explains what that means in practice.
 This chapter is a **working draft**. It is deliberately not listed in
 `book.chapters`, so it does not appear on the published site.
 
-The rule that assistants are used only on dummy data, and the workflow that
-follows from it, reflect the study group's decision. The sections marked `TODO`
-are points still to be settled — including the dummy dataset itself, which is
-being built. Once those are resolved and the chapter is agreed, register it
-under `book.chapters` in `_quarto.yml`.
+The tool choices and the rules for each reflect the study group's decision. The
+sections marked `TODO` are points still to be settled — including the dummy
+dataset itself, which is being built. Once those are resolved and the chapter
+is agreed, register it under `book.chapters` in `_quarto.yml`.
 :::
 
 ## Who and what this applies to
@@ -38,14 +42,30 @@ It does **not** change any existing rule about data handling. Where this page
 and the study's approvals or data processing agreements differ, the approvals
 govern.
 
-## The rule
+## The tools
+
+| Tool | Runs | Role | Real study data? |
+|------|------|------|------------------|
+| **Claude** | Off-site (outside TSD) | The team's main AI work tool | **Never** — dummy data only |
+| **UiOGPT** | Off-site (outside TSD) | Secondary option, if you have access | **Never** — dummy data only |
+| **TSDGPT** | On-site (inside TSD) | AI assistance on the real data, inside TSD | **Yes** — inside TSD only |
+
+TSDGPT offers a browser chat interface and an API. The API means it can also
+be used from command-line coding tools inside TSD, such as aider (installed as
+the `aider-chat` Python package).
+
+The line between the two groups is not how trustworthy the provider is, but
+**whether the data leaves TSD**. With Claude and UiOGPT it does; with TSDGPT it
+does not.
+
+## The rule for off-site tools
 
 ::: {.callout-important}
-## AI assistants are never used on real study data
+## Claude and UiOGPT are never used on real study data
 
-Assistants are used **only** against the synthetic dummy dataset, outside TSD.
-No real NCC data goes to an assistant in any form, and no assistant is involved
-at any point where real data is being handled.
+Off-site assistants are used **only** against the synthetic dummy dataset,
+outside TSD. No real NCC data goes to them in any form, and they are not
+involved at any point where real data is being handled.
 
 That means none of the following:
 
@@ -53,7 +73,9 @@ That means none of the following:
 - a printout of the first few records, or a screenshot of the data viewer;
 - identifiers, dates of birth, addresses, or free-text questionnaire answers;
 - real counts or results, whether or not small cells are suppressed;
-- error messages or console output produced by a run against real data.
+- error messages or console output produced by a run against real data;
+- anything TSDGPT produced from real data — its answers are inside TSD and
+  stay there.
 
 There is no exception for a small excerpt, a de-identified-looking extract, an
 assistant that claims not to train on inputs, or an enterprise account. If you
@@ -65,61 +87,89 @@ Because it mirrors the real schema, an assistant that can see the dummy data
 can do essentially everything it could do with the real thing — write the join,
 fix the recode, debug the error — without any of the risk.
 
-## The workflow
+## Working off-site: develop on dummy data
 
-TSD has **no internet access**, so no AI assistant runs inside TSD. Combined
-with the rule above, that gives a clean separation: the assistant works on one
-side of the wall, real data stays on the other, and only *code* crosses.
+The off-site assistant works on one side of the TSD boundary, real data stays on
+the other, and only *code* crosses.
 
 1. **Develop outside TSD, on dummy data.** Write and debug the analysis with
-   the assistant against the dummy dataset, where it can actually run the code
-   and see real errors. Iterate here until it works.
+   Claude (or UiOGPT) against the dummy dataset, where it can actually run the
+   code and see real errors. Iterate here until it works.
 2. **Verify it yourself.** Read the finished code line by line (see
    [Verification](#verification-expectations)). This is the point at which you,
    not the assistant, take responsibility for it.
-3. **Carry the code into TSD by hand.** The code crosses the air gap; the
+3. **Carry the code into TSD by hand.** The code crosses into TSD; the off-site
    assistant does not.
 4. **Run it on the real data inside TSD.** Check the output against what the
-   dummy run led you to expect. The assistant plays no part in this step.
+   dummy run led you to expect.
 
 ::: {.callout-warning}
-## If it fails on real data, go back to the dummy set
+## If it fails on real data, stay inside TSD
 
-When code works on dummy data but fails or looks wrong on the real data, the
-fix is to **reproduce the problem in the dummy dataset** — adjust the dummy
-data so it exhibits the same edge case, then debug there with the assistant.
+When code works on dummy data but fails or looks wrong on the real data,
+**debug it inside TSD with TSDGPT**, or **reproduce the problem in the dummy
+dataset** — adjust the dummy data so it exhibits the same edge case — and debug
+it there with the off-site assistant.
 
 Do not carry the real error message, the real output, or the real values back
-out to the assistant to ask what went wrong. That is the step this policy
+out to Claude or UiOGPT to ask what went wrong. That is the step this policy
 exists to prevent, and it is also the step that feels most reasonable in the
-moment.
+moment. TSDGPT exists so that you never need to.
 
 If the dummy dataset cannot reproduce the problem, that is worth reporting —
 it usually means the dummy set is missing a pattern the real data has.
 :::
 
+## Working on-site: TSDGPT
+
+TSDGPT runs entirely within TSD, so it can be given what off-site tools never
+can: real data, real output, and real error messages. Use it for work that needs
+the real data in view — debugging a failure that only happens on real data,
+checking a recode against the actual values, or reviewing results.
+
+- **Chat:** use the browser interface inside TSD.
+- **Coding tools:** use the API from tools such as aider, run inside TSD.
+
+Everything else about working in TSD still applies:
+
+- **TSDGPT output derived from real data is real data.** Its answers, code
+  comments, and summaries follow the same export rules as any other TSD
+  output: only disclosure-checked aggregate results leave TSD, never
+  person-level data.
+- **Keep data out of version control.** Coding tools such as aider commit
+  changes to git automatically. Keep data files and real output outside the
+  repository the tool works in, and check its commits before any code leaves
+  TSD — otherwise a commit can carry real data out with the code.
+- **Keep the API key out of code.** Read it from an environment variable or a
+  local configuration file that is not committed. Do not write it into scripts,
+  Quarto documents, or this documentation.
+- **Verification still applies.** Code from TSDGPT is a draft until a human has
+  read it, exactly like code from an off-site assistant (see
+  [Verification](#verification-expectations)).
+
 ::: {.callout-note}
-## TODO — study team: is the return leg fully closed?
+## TODO — study team: TSDGPT access and setup
 
-The workflow above closes the loop entirely: **nothing** produced by a run
-against real data goes to an assistant, including sanitized error text and
-disclosure-checked aggregate results.
+Record, by linking to the secure internal location rather than reproducing it
+here (this site is public):
 
-This is the strict reading of the rule and the safer default. The group should
-confirm it, or state the narrow exception it wants — for example, allowing a
-bare error message with all values stripped. If an exception is granted, say
-precisely who decides that a given paste is safe, because in practice that
-judgement is made under time pressure by the person who most wants the answer.
+- how to get access to TSDGPT, and who to ask;
+- how to configure aider or another tool to use the TSDGPT API;
+- any limits on use — for example which TSD projects it is available in.
+
+Do not put the API address, keys, or internal server names on this page.
 :::
 
 ## The dummy dataset
+
+The dummy dataset is what makes off-site AI use possible.
 
 ::: {.callout-note}
 ## TODO — study team: the dummy dataset is still being built
 
 A shared synthetic dataset mirroring the NCC schema is planned but not yet
-available. Until it exists, this chapter describes the intended workflow rather
-than one that can be followed today.
+available. Until it exists, off-site use depends on dummy data you generate
+yourself (see below).
 
 Record here, once settled:
 
@@ -172,7 +222,10 @@ family, put those in the dummy set too — that is where they are cheap to
 handle.
 :::
 
-## What may be shared with an assistant
+## What may be shared with an off-site assistant
+
+This table is for Claude and UiOGPT. TSDGPT, inside TSD, may also see the
+right-hand column — but what it produces stays in TSD.
 
 | Safe to share | Never share |
 |---|---|
@@ -193,10 +246,10 @@ from real data*, which is a question you can always answer.
 ::: {.callout-warning}
 ## AI-written code is a draft until a human has read it
 
-An assistant produces plausible code, not verified code. Code that runs green
-against dummy data has been shown to be *syntactically* sound and to behave
-sensibly on invented values — not to be correct for the study's actual
-research question.
+An assistant produces plausible code, not verified code. This applies equally
+to Claude, UiOGPT, and TSDGPT. Code that runs green against dummy data has been
+shown to be *syntactically* sound and to behave sensibly on invented values —
+not to be correct for the study's actual research question.
 :::
 
 Before AI-assisted code is run on real data:
@@ -248,39 +301,44 @@ Decide and record:
   versus drafted text versus generated analysis), and the wording to use. Note
   that most publishers require that AI tools are **not** listed as authors.
 - **In internal analysis documentation** — whether analysis plans and analysis
-  scripts should record that an assistant was used, and if so where (a header
-  comment, a section in the plan, or a project log). Recording the dummy
-  dataset version the analysis was developed against belongs here too.
+  scripts should record that an assistant was used, and which one, and if so
+  where (a header comment, a section in the plan, or a project log). Recording
+  the dummy dataset version the analysis was developed against belongs here
+  too.
 - **In this repository** — whether AI-assisted contributions to the
   documentation should be flagged in the pull request.
 :::
 
-## Approved tools
+## Accounts and new tools
 
 ::: {.callout-note}
-## TODO — study team: which tools, where they may run, who approves
+## TODO — study team: accounts, access, and new tools
 
-List the assistants the group has approved, and for each: where it may be run
-(personal machine, OUS-managed machine, institutional account), which account
-type is required, and whether it may be pointed at the analysis repository.
+The approved tools are listed under [The tools](#the-tools). Record, for each:
+which account type is required (for example a team or institutional account
+rather than a personal one), how to get access, and whether it may be pointed
+at an analysis repository.
 
 Record who to ask before adopting a tool that is not on the list, and note that
 the question needs answering **before** first use, not after.
 
-Assistants that index a whole project directory or run commands automatically
-need particular scrutiny. On a machine that also holds real data — an exported
-extract, a downloaded result, a screenshot — such a tool can read files the
-user never intended to share, which is a way real data reaches an assistant
-without anyone pasting anything.
+Off-site assistants that index a whole project directory or run commands
+automatically — Claude Code is one — need particular scrutiny. On a machine
+that also holds real data — an exported extract, a downloaded result, a
+screenshot — such a tool can read files the user never intended to share, which
+is a way real data reaches an assistant without anyone pasting anything.
 :::
 
-## If real data reaches an assistant anyway
+## If real data reaches an off-site assistant anyway
 
-If you realise that real data of any kind has been given to an assistant, treat
-it as a suspected personal-data breach and report it immediately. Do not wait
-to establish how serious it was, and do not try to resolve it by deleting the
-conversation — deletion does not undo the transfer, and it destroys the record
-needed to assess what happened.
+If you realise that real data of any kind has been given to Claude, UiOGPT, or
+any other assistant outside TSD, treat it as a suspected personal-data breach
+and report it immediately. Do not wait to establish how serious it was, and do
+not try to resolve it by deleting the conversation — deletion does not undo the
+transfer, and it destroys the record needed to assess what happened.
+
+Using TSDGPT with real data inside TSD is not an incident; that is what it is
+for.
 
 ::: {.callout-note}
 ## TODO — study team: incident route
