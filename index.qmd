@@ -7,6 +7,32 @@ The site is organised into two parts:
 - **Study Manual** — how the study is run: design, procedures, and data collection.
 - **Best Practices** — shared conventions for managing and analysing NCC data reproducibly.
 
+## Publications
+
+Publications from the NCC study are collected on the study's [Google Scholar profile]({{< var scholar.url >}}).
+
+<!-- Bibliometrics: fill in the values in _variables.yml, then delete the
+     `.content-hidden` wrapper below (the opening `::::: {.content-hidden}` line
+     and the closing `:::::` line) so the block is shown. -->
+::::: {.content-hidden}
+:::: {.scholar-metrics}
+::: {.scholar-metric}
+[{{< var scholar.citations >}}]{.scholar-value}
+[Citations]{.scholar-label}
+:::
+::: {.scholar-metric}
+[{{< var scholar.h-index >}}]{.scholar-value}
+[h-index]{.scholar-label}
+:::
+::: {.scholar-metric}
+[{{< var scholar.i10-index >}}]{.scholar-value}
+[i10-index]{.scholar-label}
+:::
+::::
+
+[Source: Google Scholar, as of {{< var scholar.as-of >}}.]{.scholar-source}
+:::::
+
 ## How to use this site
 
 Use the sidebar to navigate, or the search box (top of the sidebar) to jump to a topic. Each page has an **"Edit this page"** link once the repository URL is configured, so corrections can be proposed directly.
