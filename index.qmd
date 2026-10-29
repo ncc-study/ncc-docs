@@ -11,27 +11,7 @@ The site is organised into two parts:
 
 Publications from the NCC study are collected on the study's [Google Scholar profile]({{< var scholar.url >}}).
 
-<!-- Bibliometrics: fill in the values in _variables.yml, then delete the
-     `.content-hidden` wrapper below (the opening `::::: {.content-hidden}` line
-     and the closing `:::::` line) so the block is shown. -->
-::::: {.content-hidden}
-:::: {.scholar-metrics}
-::: {.scholar-metric}
-[{{< var scholar.citations >}}]{.scholar-value}
-[Citations]{.scholar-label}
-:::
-::: {.scholar-metric}
-[{{< var scholar.h-index >}}]{.scholar-value}
-[h-index]{.scholar-label}
-:::
-::: {.scholar-metric}
-[{{< var scholar.i10-index >}}]{.scholar-value}
-[i10-index]{.scholar-label}
-:::
-::::
-
-[Source: Google Scholar, as of {{< var scholar.as-of >}}.]{.scholar-source}
-:::::
+{{< include _scholar-metrics.md >}}
 
 ## How to use this site
 

@@ -1,12 +1,3 @@
 # Site-wide values, inserted into pages with {{< var key >}}.
-#
-# Google Scholar bibliometrics for the NCC study profile.
-# Google Scholar has no API and blocks automated scraping, so these are
-# updated by hand: copy the "All" column from the profile's "Cited by" box
-# and set `as-of` to the date you copied them (YYYY-MM-DD).
 scholar:
   url: "https://scholar.google.com/citations?user=SLJhEk0AAAAJ"
-  citations: ""
-  h-index: ""
-  i10-index: ""
-  as-of: ""
