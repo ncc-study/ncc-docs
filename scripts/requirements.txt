@@ -1,0 +1,4 @@
+# Dependencies for fetch_scholar_metrics.py (used by .github/workflows/publish.yml).
+scholarly==1.7.11
+# scholarly 1.7.11 imports bibtexparser.bibdatabase, which bibtexparser 2.x removed.
+bibtexparser==1.4.3

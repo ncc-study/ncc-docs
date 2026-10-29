@@ -8,7 +8,7 @@ shown when the fetch fails (Google Scholar often blocks CI runners).
 To refresh the fallback, run the script locally and commit the result
 through a pull request:
 
-    pip install scholarly==1.7.11
+    pip install -r scripts/requirements.txt
     python scripts/fetch_scholar_metrics.py SLJhEk0AAAAJ
 
 While this file holds only this comment, no metrics are shown. -->

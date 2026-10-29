@@ -44,7 +44,7 @@ jobs:
         continue-on-error: true
         timeout-minutes: 5
         run: |
-          pip install scholarly==1.7.11
+          pip install -r scripts/requirements.txt
           python scripts/fetch_scholar_metrics.py SLJhEk0AAAAJ
           # Keep the working tree clean for the publish step.
           git update-index --skip-worktree _scholar-metrics.md
