@@ -6,16 +6,22 @@ rendering; can also be run locally to refresh the committed fallback.
 
 Google Scholar has no API and often blocks requests from CI runners, so a
 failed fetch is not an error: the script leaves the existing file untouched
-and exits 0, and the site builds with the last committed values.
+and exits 0, and the site builds with the last committed values. When blocked,
+scholarly retries CAPTCHA and 403 responses indefinitely with long sleeps, so
+the fetch is cut off after FETCH_TIMEOUT_SECONDS; scholarly's log messages are
+printed so the reason for a failure shows in the workflow log.
 
 Usage: python scripts/fetch_scholar_metrics.py SCHOLAR_USER_ID
 """
 
 import datetime
+import logging
 import pathlib
 import sys
+import threading
 
 OUTPUT = pathlib.Path(__file__).resolve().parent.parent / "_scholar-metrics.md"
+FETCH_TIMEOUT_SECONDS = 90
 
 
 def fetch_metrics(user_id):
@@ -32,6 +38,26 @@ def fetch_metrics(user_id):
     if missing:
         raise ValueError(f"profile response is missing {', '.join(missing)}")
     return metrics
+
+
+def fetch_metrics_with_timeout(user_id, timeout):
+    result = {}
+
+    def run():
+        try:
+            result["metrics"] = fetch_metrics(user_id)
+        except Exception as error:
+            result["error"] = error
+
+    # A daemon thread is abandoned on timeout instead of blocking exit.
+    thread = threading.Thread(target=run, daemon=True)
+    thread.start()
+    thread.join(timeout)
+    if thread.is_alive():
+        raise TimeoutError(f"no answer from Google Scholar within {timeout} seconds")
+    if "error" in result:
+        raise result["error"]
+    return result["metrics"]
 
 
 def render_markdown(metrics, user_id, retrieved):
@@ -67,8 +93,11 @@ def main():
         sys.exit(__doc__.strip().splitlines()[-1])
     user_id = sys.argv[1]
 
+    logging.basicConfig(format="%(name)s: %(message)s", stream=sys.stdout)
+    logging.getLogger("scholarly").setLevel(logging.INFO)
+
     try:
-        metrics = fetch_metrics(user_id)
+        metrics = fetch_metrics_with_timeout(user_id, FETCH_TIMEOUT_SECONDS)
     except Exception as error:  # any failure falls back to the committed file
         print(f"::warning::Google Scholar fetch failed, keeping existing metrics: {error}")
         return
