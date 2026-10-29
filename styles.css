@@ -8,3 +8,37 @@
 .sidebar-title {
   font-weight: 600;
 }
+
+/* Google Scholar bibliometrics on the landing page (index.qmd). */
+.scholar-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.scholar-metric {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-top: 3px solid var(--ncc-accent);
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+}
+
+.scholar-value {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.scholar-label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--bs-secondary-color, #6c757d);
+}
+
+.scholar-source {
+  font-size: 0.8125rem;
+  color: var(--bs-secondary-color, #6c757d);
+}

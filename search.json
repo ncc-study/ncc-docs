@@ -10,6 +10,16 @@
     ]
   },
   {
+    "objectID": "index.html#publications",
+    "href": "index.html#publications",
+    "title": "NCC Study Documentation",
+    "section": "Publications",
+    "text": "Publications\nPublications from the NCC study are collected on the study’s Google Scholar profile.",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
     "objectID": "index.html#how-to-use-this-site",
     "href": "index.html#how-to-use-this-site",
     "title": "NCC Study Documentation",
@@ -24,7 +34,7 @@
     "href": "index.html#contributing",
     "title": "NCC Study Documentation",
     "section": "Contributing",
-    "text": "Contributing\nThis documentation is maintained collaboratively by the NCC study group. To propose a change, edit the relevant .qmd file and open a pull request — see README.md in the repository for the full workflow.\n\n\n\n\n\n\nImportant\n\n\n\nThis site is intended for documentation only. It must never contain participant-level data, personal identifiers, or restricted registry material. Assume everything here is publicly visible.\n\n\nLast built: August 4, 2026",
+    "text": "Contributing\nThis documentation is maintained collaboratively by the NCC study group. To propose a change, edit the relevant .qmd file and open a pull request — see README.md in the repository for the full workflow.\n\n\n\n\n\n\nImportant\n\n\n\nThis site is intended for documentation only. It must never contain participant-level data, personal identifiers, or restricted registry material. Assume everything here is publicly visible.\n\n\nLast built: October 29, 2026",
     "crumbs": [
       "Welcome"
     ]
