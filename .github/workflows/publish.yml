@@ -3,6 +3,9 @@ name: Publish
 on:
   push:
     branches: [main]
+  # Weekly rebuild so the Google Scholar metrics on the landing page stay current.
+  schedule:
+    - cron: "17 4 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -28,6 +31,23 @@ jobs:
       #     use-public-rspm: true
       # - name: Install R dependencies
       #   uses: r-lib/actions/setup-renv@v2   # requires an renv.lock in the repo
+
+      # Refresh the landing-page bibliometrics for this build only (nothing
+      # is committed). Google Scholar often blocks CI runners; on failure the
+      # committed _scholar-metrics.md is used and the build carries on.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch Google Scholar metrics
+        continue-on-error: true
+        timeout-minutes: 5
+        run: |
+          pip install scholarly==1.7.11
+          python scripts/fetch_scholar_metrics.py SLJhEk0AAAAJ
+          # Keep the working tree clean for the publish step.
+          git update-index --skip-worktree _scholar-metrics.md
 
       - name: Render and publish to GitHub Pages
         uses: quarto-dev/quarto-actions/publish@v2

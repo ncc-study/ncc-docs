@@ -22,6 +22,9 @@ best-practices/                 Part 2 — shared data & analysis conventions
 references.qmd                  Bibliography container
 references.bib                  Citation entries
 styles.css                      Minimal, team-editable style overrides
+_variables.yml                  Site-wide values used via {{< var >}} (e.g. Scholar profile URL)
+_scholar-metrics.md             Scholar bibliometrics on the landing page (regenerated in CI; committed copy is the fallback)
+scripts/fetch_scholar_metrics.py  Fetches Scholar metrics with `scholarly`; run by publish.yml
 .github/workflows/publish.yml   CI: renders and deploys on every push to main
 .gitignore
 ```
@@ -39,6 +42,7 @@ Always confirm `quarto render` succeeds before pushing — a render error will f
 
 Push to `main` → the `publish.yml` GitHub Action renders the book and deploys it to the `gh-pages` branch → GitHub Pages serves the site.
 
+- The workflow also runs weekly (Mondays) so the Google Scholar metrics on the landing page stay current. Before rendering it runs `scripts/fetch_scholar_metrics.py`, which overwrites `_scholar-metrics.md` for that build only. Google Scholar often blocks CI runners; when the fetch fails the committed `_scholar-metrics.md` is used instead, so refresh that fallback occasionally by running the script locally and committing the result through a PR.
 - Do **not** edit the `gh-pages` branch by hand; it is overwritten on every build.
 - First-time setup: in the repo's **Settings → Pages**, set the source to the `gh-pages` branch (root). The workflow creates that branch on its first successful run.
 - The site is public. See "Data safety" below.

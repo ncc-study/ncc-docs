@@ -1,0 +1,3 @@
+# Site-wide values, inserted into pages with {{< var key >}}.
+scholar:
+  url: "https://scholar.google.com/citations?user=SLJhEk0AAAAJ"
