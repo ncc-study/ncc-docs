@@ -75,8 +75,13 @@ The SAP is kept as `.docx`, not Markdown. Word is the format the group and its
 co-authors actually work in: it is easy to edit, comment, and track changes
 in, and it can be shared with collaborators who are not in the repository.
 Claude Code reads `.docx` files directly, so the Word document still serves as
-the specification for the analysis code in later stages. Do not maintain a
-parallel Markdown copy — one file, one source of truth.
+the specification for the analysis code in later stages.
+
+The drawback of Word is that GitHub cannot display it or show what changed
+between commits. To keep the SAP readable on GitHub, a **Markdown copy is
+generated** from the Word document and committed next to it — see
+[Generated Markdown copy](#sec-sap-markdown) under Stage 3. The Markdown copy
+is never edited by hand; `SAP.docx` is the only source of truth.
 
 ### The SAP is a living document
 
@@ -118,12 +123,46 @@ A suggested layout:
 <project-name>/
   README.md             What the project is, who is involved, how to run it
   SAP.docx              The project SAP — living document, see Stage 2
+  SAP.md                Generated from SAP.docx; readable on GitHub, never hand-edited
   CLAUDE.md             Project instructions for Claude Code (points to the SAP)
   R/                    Analysis scripts, numbered in run order
   output/               Tables and figures (aggregate, suppressed results only)
   manuscript/           Manuscript drafts
   .gitignore            Blocks data files and anything from TSD
 ```
+
+### Generated Markdown copy of the SAP {#sec-sap-markdown}
+
+`SAP.md` is regenerated from `SAP.docx` with [pandoc](https://pandoc.org)
+whenever the Word document changes, and the two are committed together. The
+generated file starts with a header that records which version of the Word
+document it was made from, so anyone can check that the copy is current:
+
+```markdown
+<!-- Generated from SAP.docx — do not edit by hand.
+     SAP version: v1.2
+     SAP.docx sha256: 3f7a…c91e
+     Generated: 2026-11-05 -->
+```
+
+The SAP version is the one written inside the document (see Stage 2); the hash
+is of the `.docx` file itself. If the hash in the header does not match the
+current `SAP.docx`, the Markdown copy is stale and must be regenerated before
+the change is merged.
+
+Regenerate with (from the project root):
+
+```bash
+pandoc SAP.docx -t gfm --wrap=none -o SAP.md
+```
+
+followed by prepending the header. The simplest way to keep this consistent is
+a small script in the project (e.g. `scripts/render-sap.sh`) that computes the
+hash, writes the header, and runs pandoc, and a note in `CLAUDE.md` telling
+Claude Code to run it whenever `SAP.docx` is modified. A pull-request check
+that recomputes the hash and fails on a mismatch is a possible later addition;
+the project template repository (see Open questions) is the natural place to
+put both.
 
 ::: {.callout-warning}
 ## The repository never contains data
@@ -171,6 +210,8 @@ it with Claude Code, on branches, through pull requests.
 
 - Repository naming convention on `ncc-study` and a standard template
   repository.
+- Whether the `SAP.md` hash check runs as a GitHub Action on pull requests,
+  and whether the project template repository should ship the render script.
 - Who approves a SAP as finalised, and whether a finalised SAP is registered
   externally.
 - Branch and review rules for project repositories.
