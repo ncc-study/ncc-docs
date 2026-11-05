@@ -109,9 +109,10 @@ With a SAP in hand, the project gets a home. This stage is done with
 **Claude Code** on a group member's machine.
 
 1. Create the project folder and copy the SAP into it.
-2. Use Claude Code to scaffold the project around the SAP: the standard folder
-   layout (see [Reproducible analysis](reproducible-analysis.qmd)), a `README`,
-   a `.gitignore` that blocks data files, and skeleton scripts that follow the
+2. Use Claude Code with the `ncc-project-setup` skill to scaffold the project
+   around the SAP: the standard folder layout below, a `README`, a `CLAUDE.md`
+   that points Claude Code at the SAP, a `.gitignore` that blocks data files,
+   the SAP render script, and (optionally) skeleton scripts that follow the
    structure of the SAP's analysis sections.
 3. Initialise the folder as a Git repository and create it under the
    **`ncc-study` GitHub organisation**. Repositories are private.
@@ -128,6 +129,7 @@ A suggested layout:
   R/                    Analysis scripts, numbered in run order
   output/               Tables and figures (aggregate, suppressed results only)
   manuscript/           Manuscript drafts
+  scripts/render-sap.sh Regenerates SAP.md from SAP.docx
   .gitignore            Blocks data files and anything from TSD
 ```
 
@@ -156,13 +158,14 @@ Regenerate with (from the project root):
 pandoc SAP.docx -t gfm --wrap=none -o SAP.md
 ```
 
-followed by prepending the header. The simplest way to keep this consistent is
-a small script in the project (e.g. `scripts/render-sap.sh`) that computes the
-hash, writes the header, and runs pandoc, and a note in `CLAUDE.md` telling
-Claude Code to run it whenever `SAP.docx` is modified. A pull-request check
-that recomputes the hash and fails on a mismatch is a possible later addition;
-the project template repository (see Open questions) is the natural place to
-put both.
+followed by prepending the header. In practice this is done by
+`scripts/render-sap.sh`, which the `ncc-project-setup` skill (in the
+[ncc-skills-library](https://github.com/ncc-study/ncc-skills-library)) copies
+into every project it scaffolds. The script computes the hash, writes the
+header, and runs pandoc; `scripts/render-sap.sh --check` reports whether
+`SAP.md` is stale. The project's `CLAUDE.md` tells Claude Code to run it
+whenever `SAP.docx` is modified. A pull-request check that runs `--check` and
+fails on a mismatch is a possible later addition.
 
 ::: {.callout-warning}
 ## The repository never contains data
@@ -210,8 +213,8 @@ it with Claude Code, on branches, through pull requests.
 
 - Repository naming convention on `ncc-study` and a standard template
   repository.
-- Whether the `SAP.md` hash check runs as a GitHub Action on pull requests,
-  and whether the project template repository should ship the render script.
+- Whether the `SAP.md` hash check (`render-sap.sh --check`) should run as a
+  GitHub Action on pull requests.
 - Who approves a SAP as finalised, and whether a finalised SAP is registered
   externally.
 - Branch and review rules for project repositories.
