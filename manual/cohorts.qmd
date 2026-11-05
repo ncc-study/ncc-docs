@@ -1,0 +1,227 @@
+---
+subtitle: "The full study population and the subcohorts within it"
+---
+
+# Cohorts {#sec-cohorts}
+
+This page defines the **full NCC cohort** and the **subcohorts** within it: who
+counts as a participant, how the subcohorts are constituted, and how to select
+one correctly in an analysis. For how participants are recruited and how their
+data is gathered, see @sec-data-collection; for how the delivered datasets are
+structured and joined, see
+[Data management](../best-practices/data-management.qmd).
+
+::: {.callout-note}
+## Draft — placeholders to complete
+
+This chapter is a **working draft**, not listed in `book.chapters`, so it does
+not appear on the published site.
+
+The structure below — how the full cohort is defined, the kinds of subcohort
+the study has, and how to select one in analysis — is written from what the
+repository documents. The subcohorts themselves are marked with `TODO`
+callouts: only **CLOC** is currently documented in this repository, and the
+study team needs to supply the rest.
+:::
+
+## The full cohort
+
+The full NCC cohort is every participant who has consented to take part and has
+not withdrawn. In the delivered data, that is every `deltaker_id` present in
+the research-tier files for a given release.
+
+Two properties follow from how the data is processed, and both matter when you
+report a cohort size:
+
+- **The cohort is defined by consent, not by response.** A participant is in
+  the cohort once consent is recorded, whether or not they have answered any
+  particular questionnaire. Someone who consented and then never completed a
+  follow-up is still a cohort member with missing follow-up data — not a
+  non-member.
+- **The cohort is dynamic, not fixed.** Withdrawn consents are re-applied on
+  *every* processing run, so a participant who withdraws is removed from all
+  subsequently delivered datasets. Two releases of the same dataset can
+  therefore have different row counts, and the difference is not an error.
+
+::: {.callout-important}
+Because the cohort changes between releases, a bare participant count is not
+reproducible. Always state **which data release** a number refers to when you
+report a cohort or subcohort size.
+:::
+
+::: {.callout-note}
+## TODO — study team: the cohort in numbers
+
+Record, against a named data release:
+
+- the number of participants **enrolled** in total;
+- the number **currently active** after withdrawals;
+- the recruitment period and eligibility criteria, or a cross-reference to
+  [Study overview](study-overview.qmd) if they are documented there.
+
+Do not duplicate the eligibility criteria in both places — write them once and
+cross-reference.
+:::
+
+## Kinds of subcohort
+
+"Subcohort" is used loosely in day-to-day conversation for three quite
+different things. They behave differently, and conflating them causes real
+errors, so this page keeps them separate.
+
+| Kind | Defined by | Membership is |
+|------|-----------|---------------|
+| **Recruited sub-study** | Enrolment into a distinct sub-study, usually with its own questionnaires and approvals | A fact about the participant, fixed at recruitment |
+| **Response-defined group** | Which questionnaires a participant actually completed | A consequence of participation, changing as data accrues |
+| **Analytic subgroup** | A variable value (e.g. infection status, vaccination status) | A choice made by the analyst, in code |
+
+The distinction that matters most is between the first and the last. A
+**recruited sub-study** has its own governance — its own aim, its own inclusion
+criteria, possibly its own approvals — and you cannot construct or redefine it
+yourself. An **analytic subgroup** is something you define in your analysis
+script, and it is only as reproducible as the code that defines it.
+
+::: {.callout-warning}
+Do not describe an analytic subgroup as a sub-study in a manuscript. "The
+long-COVID subcohort" means something different depending on whether
+participants were *recruited* into it or *classified* into it after the fact,
+and readers will assume the former.
+:::
+
+## Recruited sub-studies
+
+### CLOC
+
+CLOC is the sub-study documented in this repository. What is established:
+
+- It uses the **R-family report questionnaires** (R1–R6), whose variables carry
+  the `R1_`–`R6_` prefixes.
+- It is delivered as its own topic dataset, `cloc_dataset`.
+
+::: {.callout-note}
+## TODO — study team: CLOC
+
+Describe:
+
+- the **aim** of the sub-study and how it relates to the main study's aims;
+- **who is included** — the inclusion criteria and how participants entered it,
+  including whether entry was by invitation, self-selection, or a rule applied
+  to existing cohort members;
+- **how many** participants it contains, against a named release;
+- its **approvals** — whether it falls under the main study's REK approval or
+  has its own, and whether consent for it was separate;
+- the **schedule** of the R-family questionnaires;
+- how to identify a CLOC participant **in the data** — the variable or rule
+  that marks membership (see the warning below).
+:::
+
+::: {.callout-note}
+## TODO — study team: the other subcohorts
+
+CLOC is the only sub-study named in this repository. List the others here, and
+for each one record the same set of facts as above: aim, inclusion criteria and
+route of entry, size against a named release, approvals and consent basis,
+questionnaires used, and the rule that identifies a member in the delivered
+data.
+
+Where a subcohort is one of the other two kinds in the table above — a
+response-defined group or an analytic subgroup — say so explicitly, so it is
+not mistaken for a recruited sub-study.
+:::
+
+## Topic datasets are not subcohorts
+
+The delivered **topic datasets** — `cloc_dataset`, `long_covid_dataset`,
+`vaccine_dataset` — are named after research areas, which makes it tempting to
+read them as subcohort extracts. They are a *variable* selection: each one
+bundles the forms, registry data, and derived variables relevant to a topic.
+
+::: {.callout-warning}
+Do not assume that a row in `cloc_dataset` means the participant is a CLOC
+participant, or that the file's row count is the CLOC subcohort size.
+
+A dataset scoped to a topic may still contain the whole cohort, with
+non-members carrying missing values for the topic's variables — which is
+exactly what a full join produces. Establish membership from a documented
+membership rule, not from the file you happen to have loaded.
+:::
+
+::: {.callout-note}
+## TODO — study team: confirm how topic datasets are scoped
+
+State, for each topic dataset, whether it contains **all** cohort members or is
+**filtered** to the relevant subcohort. This is the single most likely source
+of a wrong denominator, and it cannot be determined from the documentation as
+it currently stands.
+:::
+
+## Selecting a subcohort in analysis
+
+Once the membership rules are documented, apply them explicitly:
+
+1. **Define membership in code, from a documented variable or rule.** Never
+   define it by which file you loaded, and never by which rows happen to be
+   non-missing.
+2. **Filter on value codes, not label text.** Codes are stable across releases;
+   label wording may be refined.
+3. **Choose the join deliberately.** A full join keeps the whole cohort and
+   represents non-membership as missing; an inner join silently drops everyone
+   who is not in both files. For a subcohort analysis, an inner join is often
+   what you want — but it should be a decision you made, not a side effect.
+4. **Report the resulting size, and check it.** Assert the expected count
+   rather than eyeballing it, so a changed release fails loudly instead of
+   quietly shifting your denominator.
+
+```r
+library(tidyverse)
+
+# Membership from a documented rule — not from which file was loaded.
+# PLACEHOLDER: `membership_variable` and its code are not yet documented.
+# Substitute the real variable and value code once the study team has
+# recorded them above; filter on the code, never on the label text.
+cloc_cohort <- full_dataset |>
+  dplyr::filter(membership_variable == 1)
+
+# Fail loudly if the release changed the size out from under the analysis.
+stopifnot(
+  nrow(cloc_cohort) == dplyr::n_distinct(cloc_cohort$deltaker_id)
+)
+```
+
+::: {.callout-tip}
+Record the **data release** and the **membership rule** at the top of every
+analysis script. Between them they make a participant count reproducible; a
+count without them cannot be checked by anyone else.
+:::
+
+## Reporting cohorts in publications
+
+Observational work from the study follows **STROBE** (and **RECORD** for the
+registry-linked analyses), both of which expect the study population to be
+described precisely.
+
+For each analysis, state:
+
+- the **data release** the numbers come from;
+- how the **analysis population** was derived from the full cohort — the
+  eligibility rule, the subcohort rule, and each exclusion applied;
+- the **number excluded at each step**, so a participant flow diagram can be
+  reconstructed;
+- whether a subcohort was **recruited** or **defined analytically**.
+
+::: {.callout-note}
+## TODO — study team: a standard cohort-flow figure
+
+Decide whether the group maintains a standard participant-flow diagram from
+full cohort to analysis population, and if so where the template lives. A
+shared template keeps flow diagrams comparable across the study's papers.
+:::
+
+## See also
+
+- @sec-data-collection — how participants are recruited and how each data
+  source is gathered.
+- [Study overview](study-overview.qmd) — the study's design, eligibility, and
+  approvals.
+- [Data management](../best-practices/data-management.qmd) — dataset structure,
+  the `1:1` join model, and the topic-versus-legacy delivery modes.
