@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Analysis workflow – NCC Study Documentation</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../references.html" rel="next">
+<link href="../best-practices/reproducible-analysis.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-27db5f87f0def596b16f613d6c9bdbfa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../best-practices/data-management.html">Best Practices</a></li><li class="breadcrumb-item"><a href="../best-practices/analysis-workflow.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Analysis workflow</span></a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Site">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">NCC Study Documentation</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ncc-study/ncc-docs" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Study Manual</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../manual/study-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Study Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../manual/data-collection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data collection</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Best Practices</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../best-practices/data-management.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data management</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../best-practices/reproducible-analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Reproducible Analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../best-practices/analysis-workflow.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Analysis workflow</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#stage-1-ideation-work-freely" id="toc-stage-1-ideation-work-freely" class="nav-link active" data-scroll-target="#stage-1-ideation-work-freely"><span class="header-section-number">5.1</span> Stage 1 — Ideation: work freely</a></li>
+  <li><a href="#stage-2-formalisation-the-project-sap" id="toc-stage-2-formalisation-the-project-sap" class="nav-link" data-scroll-target="#stage-2-formalisation-the-project-sap"><span class="header-section-number">5.2</span> Stage 2 — Formalisation: the project SAP</a>
+  <ul class="collapse">
+  <li><a href="#the-sap-is-a-word-document" id="toc-the-sap-is-a-word-document" class="nav-link" data-scroll-target="#the-sap-is-a-word-document"><span class="header-section-number">5.2.1</span> The SAP is a Word document</a></li>
+  <li><a href="#the-sap-is-a-living-document" id="toc-the-sap-is-a-living-document" class="nav-link" data-scroll-target="#the-sap-is-a-living-document"><span class="header-section-number">5.2.2</span> The SAP is a living document</a></li>
+  </ul></li>
+  <li><a href="#stage-3-project-set-up-folder-and-repository" id="toc-stage-3-project-set-up-folder-and-repository" class="nav-link" data-scroll-target="#stage-3-project-set-up-folder-and-repository"><span class="header-section-number">5.3</span> Stage 3 — Project set-up: folder and repository</a>
+  <ul class="collapse">
+  <li><a href="#sec-sap-markdown" id="toc-sec-sap-markdown" class="nav-link" data-scroll-target="#sec-sap-markdown"><span class="header-section-number">5.3.1</span> Generated Markdown copy of the SAP</a></li>
+  </ul></li>
+  <li><a href="#stage-4-analysis-and-writing-the-repository-as-collaborative-workspace" id="toc-stage-4-analysis-and-writing-the-repository-as-collaborative-workspace" class="nav-link" data-scroll-target="#stage-4-analysis-and-writing-the-repository-as-collaborative-workspace"><span class="header-section-number">5.4</span> Stage 4 — Analysis and writing: the repository as collaborative workspace</a></li>
+  <li><a href="#summary-of-the-handovers" id="toc-summary-of-the-handovers" class="nav-link" data-scroll-target="#summary-of-the-handovers"><span class="header-section-number">5.5</span> Summary of the handovers</a></li>
+  <li><a href="#open-questions" id="toc-open-questions" class="nav-link" data-scroll-target="#open-questions"><span class="header-section-number">5.6</span> Open questions</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ncc-study/ncc-docs/edit/main/best-practices/analysis-workflow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ncc-study/ncc-docs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/ncc-study/ncc-docs/blob/main/best-practices/analysis-workflow.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../best-practices/data-management.html">Best Practices</a></li><li class="breadcrumb-item"><a href="../best-practices/analysis-workflow.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Analysis workflow</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Analysis workflow</span></h1>
+<p class="subtitle lead">From idea to repository: how an NCC analysis project is developed</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Draft
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This chapter is a first draft of the working group’s preferred workflow for developing an analysis project. It describes the <em>intended</em> flow; details (templates, repository conventions, review rules) will be filled in as the group agrees on them. Comment and edit freely.</p>
+</div>
+</div>
+<p>This page describes how an NCC analysis project moves from a loose idea to a collaborative repository with a statistical analysis plan (SAP), analysis code, and manuscript drafts. The workflow has four stages. Each stage has a clear <em>home</em> (where the work happens), a clear <em>output</em>, and a clear <em>handover</em> to the next stage.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Stage</th>
+<th>Where the work happens</th>
+<th>Output</th>
+<th>Handover</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Ideation</td>
+<td>Anywhere — notes, chat, meetings</td>
+<td>A research idea worth formalising</td>
+<td>A short description of the question</td>
+</tr>
+<tr class="even">
+<td>2. Formalisation</td>
+<td>Claude chat (claude.ai / Claude Desktop)</td>
+<td>A draft project SAP</td>
+<td>The SAP document</td>
+</tr>
+<tr class="odd">
+<td>3. Project set-up</td>
+<td>Claude Code, local machine</td>
+<td>A project folder, initialised as a repository on <code>ncc-study</code></td>
+<td>The repository</td>
+</tr>
+<tr class="even">
+<td>4. Analysis and writing</td>
+<td>The repository (Claude Code + TSD + GitHub)</td>
+<td>Analysis code, results, manuscript drafts</td>
+<td>Submission / publication</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>The data rule applies at every stage
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>NCC data lives on TSD and never leaves it. Nothing in this workflow moves person-level data: Claude helps to <em>plan</em>, <em>write code</em>, and <em>document</em>; analysis code is run on TSD by a group member, and only aggregate, small-cell-suppressed results come out. See <a href="../best-practices/data-management.html">Data management</a> and the <code>ncc-analysis-principles</code> skill for the full rules.</p>
+</div>
+</div>
+<section id="stage-1-ideation-work-freely" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="stage-1-ideation-work-freely"><span class="header-section-number">5.1</span> Stage 1 — Ideation: work freely</h2>
+<p>The first stage is deliberately unstructured. Ideas come from meetings, from reading, from results of earlier projects, and from conversations with Claude or colleagues. At this stage:</p>
+<ul>
+<li>Explore freely. Use any tool — chat, notes, a whiteboard, a scratch script on TSD against the data documentation.</li>
+<li>Do not write a SAP yet. The point is to find out whether the question is interesting, answerable with the NCC data, and not already covered.</li>
+<li>Keep a short note of the idea (a few sentences: the question, the population, the exposure/outcome, why it matters). This note is the only thing that needs to survive the ideation stage.</li>
+</ul>
+<p>Ideation ends when someone decides the project should be formalised.</p>
+</section>
+<section id="stage-2-formalisation-the-project-sap" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="stage-2-formalisation-the-project-sap"><span class="header-section-number">5.2</span> Stage 2 — Formalisation: the project SAP</h2>
+<p>When an idea is to become a project, the work moves to <strong>Claude chat</strong> (claude.ai or Claude Desktop) with the NCC skills installed. The purpose of this stage is to pin down the parameters and scope of the project and to express them as a <strong>project SAP</strong>.</p>
+<ol type="1">
+<li>Open a new conversation and describe the project: research question, population, exposure(s), outcome(s), data sources, time windows, and any constraints (approvals, data availability, deadlines).</li>
+<li>Ask Claude to <strong>draft a SAP</strong>. The <code>ncc-sap-generator</code> skill produces a draft document with placeholders and flagged decisions; iterate on it in the conversation until the scope is settled.</li>
+<li>Describe variables by name and definition only (codebook entries), never by example values — the <code>ncc-analysis-principles</code> skill enforces this.</li>
+<li>Save the resulting SAP as a <strong>Word document</strong> (<code>SAP.docx</code>). This file is the main output of the stage.</li>
+</ol>
+<section id="the-sap-is-a-word-document" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="the-sap-is-a-word-document"><span class="header-section-number">5.2.1</span> The SAP is a Word document</h3>
+<p>The SAP is kept as <code>.docx</code>, not Markdown. Word is the format the group and its co-authors actually work in: it is easy to edit, comment, and track changes in, and it can be shared with collaborators who are not in the repository. Claude Code reads <code>.docx</code> files directly, so the Word document still serves as the specification for the analysis code in later stages.</p>
+<p>The drawback of Word is that GitHub cannot display it or show what changed between commits. To keep the SAP readable on GitHub, a <strong>Markdown copy is generated</strong> from the Word document and committed next to it — see <a href="#sec-sap-markdown">Generated Markdown copy</a> under Stage 3. The Markdown copy is never edited by hand; <code>SAP.docx</code> is the only source of truth.</p>
+</section>
+<section id="the-sap-is-a-living-document" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="the-sap-is-a-living-document"><span class="header-section-number">5.2.2</span> The SAP is a living document</h3>
+<p>In this workflow the SAP is not a one-off, filed-and-forgotten plan. It has two roles for the rest of the project’s life:</p>
+<ul>
+<li><strong>Decision log.</strong> Every substantive decision — inclusion criteria, variable definitions, model choices, sensitivity analyses, and any later <em>change</em> to these — is recorded in the SAP, with a date and a short rationale. When the project is reported, the SAP shows what was pre-specified and what was changed, and why.</li>
+<li><strong>Engineering harness.</strong> The SAP defines what the analysis code must do. In the next stages Claude Code reads it as the specification for the project: which datasets to load, which variables to derive, which models to fit, which tables and figures to produce. Writing the SAP carefully therefore pays off directly in the quality of the analysis code.</li>
+</ul>
+<p>A SAP draft is versioned (v0.1, v0.2, …); a SAP is marked finalised (v1.0) when the group agrees on it, and amendments after that are numbered (v1.1, …) and listed in a change log inside the document.</p>
+</section>
+</section>
+<section id="stage-3-project-set-up-folder-and-repository" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="stage-3-project-set-up-folder-and-repository"><span class="header-section-number">5.3</span> Stage 3 — Project set-up: folder and repository</h2>
+<p>With a SAP in hand, the project gets a home. This stage is done with <strong>Claude Code</strong> on a group member’s machine.</p>
+<ol type="1">
+<li>Create the project folder and copy the SAP into it.</li>
+<li>Use Claude Code with the <code>ncc-project-setup</code> skill to scaffold the project around the SAP: the standard folder layout below, a <code>README</code>, a <code>CLAUDE.md</code> that points Claude Code at the SAP, a <code>.gitignore</code> that blocks data files, the SAP render script, and (optionally) skeleton scripts that follow the structure of the SAP’s analysis sections.</li>
+<li>Initialise the folder as a Git repository and create it under the <strong><code>ncc-study</code> GitHub organisation</strong>. Repositories are private.</li>
+<li>Add the collaborators on the project to the repository.</li>
+</ol>
+<p>A suggested layout:</p>
+<pre><code>&lt;project-name&gt;/
+  README.md             What the project is, who is involved, how to run it
+  SAP.docx              The project SAP — living document, see Stage 2
+  SAP.md                Generated from SAP.docx; readable on GitHub, never hand-edited
+  CLAUDE.md             Project instructions for Claude Code (points to the SAP)
+  R/                    Analysis scripts, numbered in run order
+  output/               Tables and figures (aggregate, suppressed results only)
+  manuscript/           Manuscript drafts
+  scripts/render-sap.sh Regenerates SAP.md from SAP.docx
+  .gitignore            Blocks data files and anything from TSD</code></pre>
+<section id="sec-sap-markdown" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="sec-sap-markdown"><span class="header-section-number">5.3.1</span> Generated Markdown copy of the SAP</h3>
+<p><code>SAP.md</code> is regenerated from <code>SAP.docx</code> with <a href="https://pandoc.org">pandoc</a> whenever the Word document changes, and the two are committed together. The generated file starts with a header that records which version of the Word document it was made from, so anyone can check that the copy is current:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Generated from SAP.docx — do not edit by hand.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">     SAP version: v1.2</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">     SAP.docx sha256: 3f7a…c91e</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">     Generated: 2026-11-05 --&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The SAP version is the one written inside the document (see Stage 2); the hash is of the <code>.docx</code> file itself. If the hash in the header does not match the current <code>SAP.docx</code>, the Markdown copy is stale and must be regenerated before the change is merged.</p>
+<p>Regenerate with (from the project root):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> SAP.docx <span class="at">-t</span> gfm <span class="at">--wrap</span><span class="op">=</span>none <span class="at">-o</span> SAP.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>followed by prepending the header. In practice this is done by <code>scripts/render-sap.sh</code>, which the <code>ncc-project-setup</code> skill (in the <a href="https://github.com/ncc-study/ncc-skills-library">ncc-skills-library</a>) copies into every project it scaffolds. The script computes the hash, writes the header, and runs pandoc; <code>scripts/render-sap.sh --check</code> reports whether <code>SAP.md</code> is stale. The project’s <code>CLAUDE.md</code> tells Claude Code to run it whenever <code>SAP.docx</code> is modified. A pull-request check that runs <code>--check</code> and fails on a mismatch is a possible later addition.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>The repository never contains data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The repository is a workspace for code, documents, and aggregate results. It must not contain participant-level data, identifiers, extracts, or anything copied from TSD other than code, error messages, variable structure, and suppressed aggregate results. Check every commit.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="stage-4-analysis-and-writing-the-repository-as-collaborative-workspace" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="stage-4-analysis-and-writing-the-repository-as-collaborative-workspace"><span class="header-section-number">5.4</span> Stage 4 — Analysis and writing: the repository as collaborative workspace</h2>
+<p>From here on the repository is where the project lives. Group members work in it with Claude Code, on branches, through pull requests.</p>
+<ul>
+<li><strong>Developing the analysis.</strong> Claude Code writes and revises R scripts against the SAP. Scripts are transferred to TSD and run there; results (tables, figures, logs with no person-level content) are brought back into <code>output/</code>. Errors and variable structure can be brought back to Claude for debugging; data cannot.</li>
+<li><strong>Keeping the SAP current.</strong> When the analysis reveals that a decision has to change, the change is made in the SAP first (with a dated entry in its change log) and then in the code. The SAP and the code should never disagree.</li>
+<li><strong>Drafting the manuscript.</strong> Manuscript drafts live in <code>manuscript/</code> and are developed in the same repository, so text, tables, and figures stay together and every version is tracked. Reporting follows STROBE/RECORD (observational or registry studies) or CONSORT (trials).</li>
+<li><strong>Review.</strong> Changes go through pull requests so that another group member sees them. Use issues to track open questions and tasks.</li>
+</ul>
+</section>
+<section id="summary-of-the-handovers" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="summary-of-the-handovers"><span class="header-section-number">5.5</span> Summary of the handovers</h2>
+<ol type="1">
+<li><strong>Idea → SAP.</strong> When an idea is to be pursued, describe it in Claude chat and draft a SAP.</li>
+<li><strong>SAP → repository.</strong> When the SAP draft is settled enough to work from, create the project folder with Claude Code and push it to <code>ncc-study</code>.</li>
+<li><strong>Repository → results and manuscript.</strong> Develop code and text in the repository, keep the SAP updated as the record of decisions, and run the code on TSD.</li>
+</ol>
+</section>
+<section id="open-questions" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="open-questions"><span class="header-section-number">5.6</span> Open questions</h2>
+<p><em>To be settled by the group:</em></p>
+<ul>
+<li>Repository naming convention on <code>ncc-study</code> and a standard template repository.</li>
+<li>Whether the <code>SAP.md</code> hash check (<code>render-sap.sh --check</code>) should run as a GitHub Action on pull requests.</li>
+<li>Who approves a SAP as finalised, and whether a finalised SAP is registered externally.</li>
+<li>Branch and review rules for project repositories.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+<nav class="page-navigation" aria-label="Page">
+  <div class="nav-page nav-page-previous">
+      <a href="../best-practices/reproducible-analysis.html" class="pagination-link" aria-label="Reproducible Analysis">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Reproducible Analysis</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ncc-study/ncc-docs/edit/main/best-practices/analysis-workflow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ncc-study/ncc-docs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/ncc-study/ncc-docs/blob/main/best-practices/analysis-workflow.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div></div></footer></body></html>
