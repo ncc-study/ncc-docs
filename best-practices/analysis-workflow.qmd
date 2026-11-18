@@ -1,0 +1,220 @@
+---
+title: "Analysis workflow"
+subtitle: "From idea to repository: how an NCC analysis project is developed"
+---
+
+::: {.callout-note}
+## Draft
+
+This chapter is a first draft of the working group's preferred workflow for
+developing an analysis project. It describes the *intended* flow; details
+(templates, repository conventions, review rules) will be filled in as the
+group agrees on them. Comment and edit freely.
+:::
+
+This page describes how an NCC analysis project moves from a loose idea to a
+collaborative repository with a statistical analysis plan (SAP), analysis
+code, and manuscript drafts. The workflow has four stages. Each stage has a
+clear *home* (where the work happens), a clear *output*, and a clear *handover*
+to the next stage.
+
+| Stage | Where the work happens | Output | Handover |
+|---|---|---|---|
+| 1. Ideation | Anywhere — notes, chat, meetings | A research idea worth formalising | A short description of the question |
+| 2. Formalisation | Claude chat (claude.ai / Claude Desktop) | A draft project SAP | The SAP document |
+| 3. Project set-up | Claude Code, local machine | A project folder, initialised as a repository on `ncc-study` | The repository |
+| 4. Analysis and writing | The repository (Claude Code + TSD + GitHub) | Analysis code, results, manuscript drafts | Submission / publication |
+
+::: {.callout-important}
+## The data rule applies at every stage
+
+NCC data lives on TSD and never leaves it. Nothing in this workflow moves
+person-level data: Claude helps to *plan*, *write code*, and *document*;
+analysis code is run on TSD by a group member, and only aggregate,
+small-cell-suppressed results come out. See [Data management](data-management.qmd)
+and the `ncc-analysis-principles` skill for the full rules.
+:::
+
+## Stage 1 — Ideation: work freely
+
+The first stage is deliberately unstructured. Ideas come from meetings, from
+reading, from results of earlier projects, and from conversations with Claude
+or colleagues. At this stage:
+
+- Explore freely. Use any tool — chat, notes, a whiteboard, a scratch script
+  on TSD against the data documentation.
+- Do not write a SAP yet. The point is to find out whether the question is
+  interesting, answerable with the NCC data, and not already covered.
+- Keep a short note of the idea (a few sentences: the question, the population,
+  the exposure/outcome, why it matters). This note is the only thing that needs
+  to survive the ideation stage.
+
+Ideation ends when someone decides the project should be formalised.
+
+## Stage 2 — Formalisation: the project SAP
+
+When an idea is to become a project, the work moves to **Claude chat**
+(claude.ai or Claude Desktop) with the NCC skills installed. The purpose of this
+stage is to pin down the parameters and scope of the project and to express
+them as a **project SAP**.
+
+1. Open a new conversation and describe the project: research question,
+   population, exposure(s), outcome(s), data sources, time windows, and any
+   constraints (approvals, data availability, deadlines).
+2. Ask Claude to **draft a SAP**. The `ncc-sap-generator` skill produces a
+   draft document with placeholders and flagged decisions; iterate on it in the
+   conversation until the scope is settled.
+3. Describe variables by name and definition only (codebook entries), never by
+   example values — the `ncc-analysis-principles` skill enforces this.
+4. Save the resulting SAP as a **Word document** (`SAP.docx`). This file is
+   the main output of the stage.
+
+### The SAP is a Word document
+
+The SAP is kept as `.docx`, not Markdown. Word is the format the group and its
+co-authors actually work in: it is easy to edit, comment, and track changes
+in, and it can be shared with collaborators who are not in the repository.
+Claude Code reads `.docx` files directly, so the Word document still serves as
+the specification for the analysis code in later stages.
+
+The drawback of Word is that GitHub cannot display it or show what changed
+between commits. To keep the SAP readable on GitHub, a **Markdown copy is
+generated** from the Word document and committed next to it — see
+[Generated Markdown copy](#sec-sap-markdown) under Stage 3. The Markdown copy
+is never edited by hand; `SAP.docx` is the only source of truth.
+
+### The SAP is a living document
+
+In this workflow the SAP is not a one-off, filed-and-forgotten plan. It has two
+roles for the rest of the project's life:
+
+- **Decision log.** Every substantive decision — inclusion criteria, variable
+  definitions, model choices, sensitivity analyses, and any later *change* to
+  these — is recorded in the SAP, with a date and a short rationale. When the
+  project is reported, the SAP shows what was pre-specified and what was
+  changed, and why.
+- **Engineering harness.** The SAP defines what the analysis code must do. In
+  the next stages Claude Code reads it as the specification for the project:
+  which datasets to load, which variables to derive, which models to fit,
+  which tables and figures to produce. Writing the SAP carefully therefore
+  pays off directly in the quality of the analysis code.
+
+A SAP draft is versioned (v0.1, v0.2, …); a SAP is marked finalised (v1.0) when
+the group agrees on it, and amendments after that are numbered (v1.1, …) and
+listed in a change log inside the document.
+
+## Stage 3 — Project set-up: folder and repository
+
+With a SAP in hand, the project gets a home. This stage is done with
+**Claude Code** on a group member's machine.
+
+1. Create the project folder and copy the SAP into it.
+2. Use Claude Code with the `ncc-project-setup` skill to scaffold the project
+   around the SAP: the standard folder layout below, a `README`, a `CLAUDE.md`
+   that points Claude Code at the SAP, a `.gitignore` that blocks data files,
+   the SAP render script, and (optionally) skeleton scripts that follow the
+   structure of the SAP's analysis sections.
+3. Initialise the folder as a Git repository and create it under the
+   **`ncc-study` GitHub organisation**. Repositories are private.
+4. Add the collaborators on the project to the repository.
+
+A suggested layout:
+
+```
+<project-name>/
+  README.md             What the project is, who is involved, how to run it
+  SAP.docx              The project SAP — living document, see Stage 2
+  SAP.md                Generated from SAP.docx; readable on GitHub, never hand-edited
+  CLAUDE.md             Project instructions for Claude Code (points to the SAP)
+  R/                    Analysis scripts, numbered in run order
+  output/               Tables and figures (aggregate, suppressed results only)
+  manuscript/           Manuscript drafts
+  scripts/render-sap.sh Regenerates SAP.md from SAP.docx
+  .gitignore            Blocks data files and anything from TSD
+```
+
+### Generated Markdown copy of the SAP {#sec-sap-markdown}
+
+`SAP.md` is regenerated from `SAP.docx` with [pandoc](https://pandoc.org)
+whenever the Word document changes, and the two are committed together. The
+generated file starts with a header that records which version of the Word
+document it was made from, so anyone can check that the copy is current:
+
+```markdown
+<!-- Generated from SAP.docx — do not edit by hand.
+     SAP version: v1.2
+     SAP.docx sha256: 3f7a…c91e
+     Generated: 2026-11-05 -->
+```
+
+The SAP version is the one written inside the document (see Stage 2); the hash
+is of the `.docx` file itself. If the hash in the header does not match the
+current `SAP.docx`, the Markdown copy is stale and must be regenerated before
+the change is merged.
+
+Regenerate with (from the project root):
+
+```bash
+pandoc SAP.docx -t gfm --wrap=none -o SAP.md
+```
+
+followed by prepending the header. In practice this is done by
+`scripts/render-sap.sh`, which the `ncc-project-setup` skill (in the
+[ncc-skills-library](https://github.com/ncc-study/ncc-skills-library)) copies
+into every project it scaffolds. The script computes the hash, writes the
+header, and runs pandoc; `scripts/render-sap.sh --check` reports whether
+`SAP.md` is stale. The project's `CLAUDE.md` tells Claude Code to run it
+whenever `SAP.docx` is modified. A pull-request check that runs `--check` and
+fails on a mismatch is a possible later addition.
+
+::: {.callout-warning}
+## The repository never contains data
+
+The repository is a workspace for code, documents, and aggregate results. It
+must not contain participant-level data, identifiers, extracts, or anything
+copied from TSD other than code, error messages, variable structure, and
+suppressed aggregate results. Check every commit.
+:::
+
+## Stage 4 — Analysis and writing: the repository as collaborative workspace
+
+From here on the repository is where the project lives. Group members work in
+it with Claude Code, on branches, through pull requests.
+
+- **Developing the analysis.** Claude Code writes and revises R scripts against
+  the SAP. Scripts are transferred to TSD and run there; results (tables,
+  figures, logs with no person-level content) are brought back into `output/`.
+  Errors and variable structure can be brought back to Claude for debugging;
+  data cannot.
+- **Keeping the SAP current.** When the analysis reveals that a decision has
+  to change, the change is made in the SAP first (with a dated entry in its
+  change log) and then in the code. The SAP and the code should never
+  disagree.
+- **Drafting the manuscript.** Manuscript drafts live in `manuscript/` and are
+  developed in the same repository, so text, tables, and figures stay together
+  and every version is tracked. Reporting follows STROBE/RECORD (observational
+  or registry studies) or CONSORT (trials).
+- **Review.** Changes go through pull requests so that another group member
+  sees them. Use issues to track open questions and tasks.
+
+## Summary of the handovers
+
+1. **Idea → SAP.** When an idea is to be pursued, describe it in Claude chat
+   and draft a SAP.
+2. **SAP → repository.** When the SAP draft is settled enough to work from,
+   create the project folder with Claude Code and push it to `ncc-study`.
+3. **Repository → results and manuscript.** Develop code and text in the
+   repository, keep the SAP updated as the record of decisions, and run the
+   code on TSD.
+
+## Open questions
+
+*To be settled by the group:*
+
+- Repository naming convention on `ncc-study` and a standard template
+  repository.
+- Whether the `SAP.md` hash check (`render-sap.sh --check`) should run as a
+  GitHub Action on pull requests.
+- Who approves a SAP as finalised, and whether a finalised SAP is registered
+  externally.
+- Branch and review rules for project repositories.
